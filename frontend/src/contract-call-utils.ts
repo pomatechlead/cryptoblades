@@ -38,7 +38,7 @@ export async function getFeeInSkillFromUsd(
 
 type WithOptionalFrom<T extends { from: unknown }> = Omit<T, 'from'> & Partial<Pick<T, 'from'>>;
 
-export async function approveFeeFromAnyContractSimple<T extends Contract<unknown>>(
+export async function approveFeeWalletOnly<T extends Contract<unknown>>(
   feeContract: T,
   skillToken: Contracts['SkillToken'],
   from: NonNullable<Web3JsCallOptions['from']>,
@@ -116,7 +116,7 @@ export async function approveFeeFromAnyContract<T extends Contract<unknown>>(
     }
   }
 
-  return await approveFeeFromAnyContractSimple(
+  return await approveFeeWalletOnly(
     feeContract,
     skillToken,
     from,

@@ -33,7 +33,7 @@ import {
   StakeType
 } from './interfaces';
 import {getCharacterNameFromSeed} from './character-name';
-import {approveFee, approveFeeFromAnyContract, approveFeeFromAnyContractSimple, getFeeInSkillFromUsd} from './contract-call-utils';
+import {approveFee, approveFeeFromAnyContract, approveFeeWalletOnly, getFeeInSkillFromUsd} from './contract-call-utils';
 
 import {burningManager as featureFlagBurningManager, raid as featureFlagRaid, stakeOnly as featureFlagStakeOnly} from './feature-flags';
 import {ERC20, IERC20, IERC721, INftStakingRewards, IStakingRewards} from '../../build/abi-interfaces';
@@ -2682,7 +2682,7 @@ export function createStore(web3: Web3) {
         if(!CryptoBlades || !Blacksmith || !SkillToken || !state.defaultAccount) return;
 
         if(currency === 0) {
-          await approveFeeFromAnyContractSimple(
+          await approveFeeWalletOnly(
             CryptoBlades,
             SkillToken,
             state.defaultAccount,
@@ -2714,7 +2714,7 @@ export function createStore(web3: Web3) {
         if(!CryptoBlades || !Blacksmith || !SkillToken || !state.defaultAccount) return;
 
         if(currency === 0) {
-          await approveFeeFromAnyContractSimple(
+          await approveFeeWalletOnly(
             CryptoBlades,
             SkillToken,
             state.defaultAccount,
@@ -2745,7 +2745,7 @@ export function createStore(web3: Web3) {
         if(!CryptoBlades || !Blacksmith || !SkillToken || !state.defaultAccount) return;
 
         if(currency === 0) {
-          await approveFeeFromAnyContractSimple(
+          await approveFeeWalletOnly(
             CryptoBlades,
             SkillToken,
             state.defaultAccount,
@@ -3408,7 +3408,7 @@ export function createStore(web3: Web3) {
         const { CryptoBlades, SkillToken, Blacksmith } = state.contracts();
         if(!CryptoBlades || !Blacksmith || !state.defaultAccount) return;
 
-        await approveFeeFromAnyContractSimple(
+        await approveFeeWalletOnly(
           CryptoBlades,
           SkillToken,
           state.defaultAccount,
@@ -3445,7 +3445,7 @@ export function createStore(web3: Web3) {
           .getSkillNeededFromUserWallet(state.defaultAccount, payingAmount, true)
           .call(defaultCallOptions(state));
 
-        await approveFeeFromAnyContractSimple(
+        await approveFeeWalletOnly(
           CryptoBlades,
           SkillToken,
           state.defaultAccount,
@@ -4313,7 +4313,7 @@ export function createStore(web3: Web3) {
         if(!CryptoBlades || !CharacterRenameTagConsumables || !Blacksmith || !state.defaultAccount) return;
 
         try {
-          await approveFeeFromAnyContractSimple(
+          await approveFeeWalletOnly(
             CryptoBlades,
             SkillToken,
             state.defaultAccount,
@@ -4341,7 +4341,7 @@ export function createStore(web3: Web3) {
         if(!CryptoBlades || !CharacterRenameTagConsumables || !Blacksmith || !state.defaultAccount) return;
 
         try {
-          await approveFeeFromAnyContractSimple(
+          await approveFeeWalletOnly(
             CryptoBlades,
             SkillToken,
             state.defaultAccount,
@@ -4389,7 +4389,7 @@ export function createStore(web3: Web3) {
         if(!CryptoBlades || !WeaponRenameTagConsumables || !Blacksmith || !state.defaultAccount) return;
 
         try {
-          await approveFeeFromAnyContractSimple(
+          await approveFeeWalletOnly(
             CryptoBlades,
             SkillToken,
             state.defaultAccount,
@@ -4417,7 +4417,7 @@ export function createStore(web3: Web3) {
         if(!CryptoBlades || !WeaponRenameTagConsumables || !Blacksmith || !state.defaultAccount) return;
 
         try {
-          await approveFeeFromAnyContractSimple(
+          await approveFeeWalletOnly(
             CryptoBlades,
             SkillToken,
             state.defaultAccount,
@@ -4466,7 +4466,7 @@ export function createStore(web3: Web3) {
         if(!CryptoBlades || !CharacterFireTraitChangeConsumables || !Blacksmith || !state.defaultAccount) return;
 
         try {
-          await approveFeeFromAnyContractSimple(
+          await approveFeeWalletOnly(
             CryptoBlades,
             SkillToken,
             state.defaultAccount,
@@ -4515,7 +4515,7 @@ export function createStore(web3: Web3) {
         if(!CryptoBlades || !CharacterEarthTraitChangeConsumables || !Blacksmith || !state.defaultAccount) return;
 
         try {
-          await approveFeeFromAnyContractSimple(
+          await approveFeeWalletOnly(
             CryptoBlades,
             SkillToken,
             state.defaultAccount,
@@ -4564,7 +4564,7 @@ export function createStore(web3: Web3) {
         if(!CryptoBlades || !CharacterWaterTraitChangeConsumables || !Blacksmith || !state.defaultAccount) return;
 
         try {
-          await approveFeeFromAnyContractSimple(
+          await approveFeeWalletOnly(
             CryptoBlades,
             SkillToken,
             state.defaultAccount,
@@ -4613,7 +4613,7 @@ export function createStore(web3: Web3) {
         if(!CryptoBlades || !CharacterLightningTraitChangeConsumables || !Blacksmith || !state.defaultAccount) return;
 
         try {
-          await approveFeeFromAnyContractSimple(
+          await approveFeeWalletOnly(
             CryptoBlades,
             SkillToken,
             state.defaultAccount,
@@ -4661,7 +4661,7 @@ export function createStore(web3: Web3) {
         if(!CryptoBlades || !WeaponCosmetics || !Blacksmith || !state.defaultAccount) return;
 
         try {
-          await approveFeeFromAnyContractSimple(
+          await approveFeeWalletOnly(
             CryptoBlades,
             SkillToken,
             state.defaultAccount,
@@ -4723,7 +4723,7 @@ export function createStore(web3: Web3) {
         if(!CryptoBlades || !CharacterCosmetics || !Blacksmith || !state.defaultAccount) return;
 
         try {
-          await approveFeeFromAnyContractSimple(
+          await approveFeeWalletOnly(
             CryptoBlades,
             SkillToken,
             state.defaultAccount,
@@ -5009,7 +5009,7 @@ export function createStore(web3: Web3) {
       { nftContractAddr: string, tokenId: number, targetChain: string, bridgeFee: string }) {
         const { NFTStorage, CryptoBlades, SkillToken } = state.contracts();
         if (!NFTStorage || !CryptoBlades || !SkillToken || !state.defaultAccount) return;
-        await approveFeeFromAnyContractSimple(
+        await approveFeeWalletOnly(
           CryptoBlades,
           SkillToken,
           state.defaultAccount,
@@ -5544,7 +5544,7 @@ export function createStore(web3: Web3) {
         const { PvpArena, SkillToken } = state.contracts();
         if (!PvpArena || !SkillToken || !state.defaultAccount) return;
 
-        return await approveFeeFromAnyContractSimple(
+        return await approveFeeWalletOnly(
           PvpArena,
           SkillToken,
           state.defaultAccount,
@@ -5559,7 +5559,7 @@ export function createStore(web3: Web3) {
         if(!CryptoBlades || !BurningManager || !SkillToken || !state.defaultAccount) return;
 
         const burnCost = await BurningManager.methods.burnCharactersFee(burnIds).call(defaultCallOptions(state));
-        await approveFeeFromAnyContractSimple(
+        await approveFeeWalletOnly(
           CryptoBlades,
           SkillToken,
           state.defaultAccount,
@@ -5580,7 +5580,7 @@ export function createStore(web3: Web3) {
         if(!CryptoBlades || !BurningManager || !SkillToken || !state.defaultAccount) return;
 
         const burnCost = await BurningManager.methods.burnCharactersFee(burnIds).call(defaultCallOptions(state));
-        await approveFeeFromAnyContractSimple(
+        await approveFeeWalletOnly(
           CryptoBlades,
           SkillToken,
           state.defaultAccount,
@@ -5600,7 +5600,7 @@ export function createStore(web3: Web3) {
         const { NFTMarket, BurningManager, SkillToken, CryptoBlades } = state.contracts();
         if(!CryptoBlades || !BurningManager || !SkillToken || !NFTMarket || !state.defaultAccount) return;
 
-        await approveFeeFromAnyContractSimple(
+        await approveFeeWalletOnly(
           CryptoBlades,
           SkillToken,
           state.defaultAccount,
@@ -5731,7 +5731,7 @@ export function createStore(web3: Web3) {
 
         if(orderWithSkill) {
           const price = await SpecialWeaponsManager.methods.getSkillForgeCost(orderOption).call(defaultCallOptions(state));
-          await approveFeeFromAnyContractSimple(
+          await approveFeeWalletOnly(
             CryptoBlades,
             SkillToken,
             state.defaultAccount,
