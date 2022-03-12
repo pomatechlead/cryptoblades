@@ -153,6 +153,29 @@ export async function approveFeeDynamic<T extends Contract<unknown>>(
   );
 }
 
+export async function approveFeeWalletOrRewards<T extends Contract<unknown>>(
+  cryptoBladesContract: CryptoBladesAlias,
+  feeContract: T,
+  skillToken: Contracts['SkillToken'],
+  from: NonNullable<Web3JsCallOptions['from']>,
+  callOpts: WithOptionalFrom<Web3JsCallOptions>,
+  approveOpts: WithOptionalFrom<Web3JsSendOptions>,
+  feeInSkill: BigNumber,
+  skillRewardsAvailable: string
+) {
+  return await approveFeeFixed(
+    cryptoBladesContract,
+    feeContract,
+    skillToken,
+    from,
+    skillRewardsAvailable,
+    callOpts,
+    approveOpts,
+    feeInSkill,
+    { allowSkillRewards: true }
+  );
+}
+
 export async function approveFee(
   cryptoBladesContract: CryptoBladesAlias,
   skillToken: Contracts['SkillToken'],
