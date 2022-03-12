@@ -33,7 +33,7 @@ import {
   StakeType
 } from './interfaces';
 import {getCharacterNameFromSeed} from './character-name';
-import {approveFee, approveFeeDynamic, approveFeeWalletOnly, getFeeInSkillFromUsd} from './contract-call-utils';
+import {approveFee, approveFeeDynamic, approveFeeWalletOnly, approveFeeWalletOrRewards, getFeeInSkillFromUsd} from './contract-call-utils';
 
 import {burningManager as featureFlagBurningManager, raid as featureFlagRaid, stakeOnly as featureFlagStakeOnly} from './feature-flags';
 import {ERC20, IERC20, IERC721, INftStakingRewards, IStakingRewards} from '../../build/abi-interfaces';
@@ -2005,7 +2005,8 @@ export function createStore(web3: Web3) {
             state.skillRewards,
             defaultCallOptions(state),
             defaultCallOptions(state),
-            burningManagerMethods => burningManagerMethods.reforgeWeaponFee()
+            burningManagerMethods => burningManagerMethods.reforgeWeaponFee(),
+            { allowInGameOnlyFunds: false },
           );
 
           await BurningManager.methods
@@ -2057,7 +2058,8 @@ export function createStore(web3: Web3) {
             state.skillRewards,
             defaultCallOptions(state),
             defaultCallOptions(state),
-            burningManagerMethods => burningManagerMethods.reforgeWeaponWithDustFee()
+            burningManagerMethods => burningManagerMethods.reforgeWeaponWithDustFee(),
+            { allowInGameOnlyFunds: false },
           );
 
           await BurningManager.methods
@@ -2103,7 +2105,8 @@ export function createStore(web3: Web3) {
             state.skillRewards,
             defaultCallOptions(state),
             defaultCallOptions(state),
-            burningManagerMethods => burningManagerMethods.burnWeaponFee()
+            burningManagerMethods => burningManagerMethods.burnWeaponFee(),
+            { allowInGameOnlyFunds: false },
           );
 
           await BurningManager.methods
@@ -2486,17 +2489,17 @@ export function createStore(web3: Web3) {
           return;
         }
 
-        await approveFeeDynamic(
+        const feeInSkill = new BigNumber(await Raid1.methods.getJoinCostInSkill().call(defaultCallOptions(state)))
+
+        await approveFeeWalletOrRewards(
           CryptoBlades,
           Raid1,
           SkillToken,
           state.defaultAccount,
-          state.skillRewards,
           defaultCallOptions(state),
           defaultCallOptions(state),
-          raidsFunctions => raidsFunctions.getJoinCostInSkill(),
-          {},
-          true
+          feeInSkill,
+          state.skillRewards
         );
 
         await Raid1!.methods
@@ -3158,7 +3161,7 @@ export function createStore(web3: Web3) {
           state.skillRewards,
           defaultCallOptions(state),
           defaultCallOptions(state),
-          nftMarketFuctions => nftMarketFuctions.addFee(),
+          nftMarketFunctions => nftMarketFunctions.addFee(),
           { allowInGameOnlyFunds: false, allowSkillRewards: false },
         );
 
@@ -3196,7 +3199,7 @@ export function createStore(web3: Web3) {
           state.skillRewards,
           defaultCallOptions(state),
           defaultCallOptions(state),
-          nftMarketFuctions => nftMarketFuctions.changeFee(),
+          nftMarketFunctions => nftMarketFunctions.changeFee(),
           { allowInGameOnlyFunds: false, allowSkillRewards: false },
         );
 
@@ -3408,13 +3411,15 @@ export function createStore(web3: Web3) {
         const { CryptoBlades, SkillToken, Blacksmith } = state.contracts();
         if(!CryptoBlades || !Blacksmith || !state.defaultAccount) return;
 
-        await approveFeeWalletOnly(
+        await approveFeeWalletOrRewards(
+          CryptoBlades,
           CryptoBlades,
           SkillToken,
           state.defaultAccount,
           defaultCallOptions(state),
           defaultCallOptions(state),
-          new BigNumber(web3.utils.toWei('100', 'ether'))
+          new BigNumber(web3.utils.toWei('100', 'ether')),
+          state.skillRewards
         );
 
         await Blacksmith.methods.purchaseShield().send({
@@ -3445,13 +3450,15 @@ export function createStore(web3: Web3) {
           .getSkillNeededFromUserWallet(state.defaultAccount, payingAmount, true)
           .call(defaultCallOptions(state));
 
-        await approveFeeWalletOnly(
+        await approveFeeWalletOrRewards(
+          CryptoBlades,
           CryptoBlades,
           SkillToken,
           state.defaultAccount,
           defaultCallOptions(state),
           defaultCallOptions(state),
-          new BigNumber(skillNeeded)
+          new BigNumber(skillNeeded),
+          state.skillRewards
         );
 
         await Merchandise.methods
@@ -4313,13 +4320,15 @@ export function createStore(web3: Web3) {
         if(!CryptoBlades || !CharacterRenameTagConsumables || !Blacksmith || !state.defaultAccount) return;
 
         try {
-          await approveFeeWalletOnly(
+          await approveFeeWalletOrRewards(
+            CryptoBlades,
             CryptoBlades,
             SkillToken,
             state.defaultAccount,
             defaultCallOptions(state),
             defaultCallOptions(state),
-            new BigNumber(Web3.utils.toWei('' + price))
+            new BigNumber(Web3.utils.toWei('' + price)),
+            state.skillRewards
           );
         } catch(err) {
           console.error(err);
@@ -4341,13 +4350,15 @@ export function createStore(web3: Web3) {
         if(!CryptoBlades || !CharacterRenameTagConsumables || !Blacksmith || !state.defaultAccount) return;
 
         try {
-          await approveFeeWalletOnly(
+          await approveFeeWalletOrRewards(
+            CryptoBlades,
             CryptoBlades,
             SkillToken,
             state.defaultAccount,
             defaultCallOptions(state),
             defaultCallOptions(state),
-            new BigNumber(Web3.utils.toWei('' + price))
+            new BigNumber(Web3.utils.toWei('' + price)),
+            state.skillRewards
           );
         } catch(err) {
           console.error(err);
@@ -4389,13 +4400,15 @@ export function createStore(web3: Web3) {
         if(!CryptoBlades || !WeaponRenameTagConsumables || !Blacksmith || !state.defaultAccount) return;
 
         try {
-          await approveFeeWalletOnly(
+          await approveFeeWalletOrRewards(
+            CryptoBlades,
             CryptoBlades,
             SkillToken,
             state.defaultAccount,
             defaultCallOptions(state),
             defaultCallOptions(state),
-            new BigNumber(Web3.utils.toWei('' + price))
+            new BigNumber(Web3.utils.toWei('' + price)),
+            state.skillRewards
           );
         } catch(err) {
           console.error(err);
@@ -4417,13 +4430,15 @@ export function createStore(web3: Web3) {
         if(!CryptoBlades || !WeaponRenameTagConsumables || !Blacksmith || !state.defaultAccount) return;
 
         try {
-          await approveFeeWalletOnly(
+          await approveFeeWalletOrRewards(
+            CryptoBlades,
             CryptoBlades,
             SkillToken,
             state.defaultAccount,
             defaultCallOptions(state),
             defaultCallOptions(state),
-            new BigNumber(Web3.utils.toWei('' + price))
+            new BigNumber(Web3.utils.toWei('' + price)),
+            state.skillRewards
           );
         } catch(err) {
           console.error(err);
@@ -4466,13 +4481,15 @@ export function createStore(web3: Web3) {
         if(!CryptoBlades || !CharacterFireTraitChangeConsumables || !Blacksmith || !state.defaultAccount) return;
 
         try {
-          await approveFeeWalletOnly(
+          await approveFeeWalletOrRewards(
+            CryptoBlades,
             CryptoBlades,
             SkillToken,
             state.defaultAccount,
             defaultCallOptions(state),
             defaultCallOptions(state),
-            new BigNumber(Web3.utils.toWei('' + price))
+            new BigNumber(Web3.utils.toWei('' + price)),
+            state.skillRewards
           );
         } catch(err) {
           console.error(err);
@@ -4515,13 +4532,15 @@ export function createStore(web3: Web3) {
         if(!CryptoBlades || !CharacterEarthTraitChangeConsumables || !Blacksmith || !state.defaultAccount) return;
 
         try {
-          await approveFeeWalletOnly(
+          await approveFeeWalletOrRewards(
+            CryptoBlades,
             CryptoBlades,
             SkillToken,
             state.defaultAccount,
             defaultCallOptions(state),
             defaultCallOptions(state),
-            new BigNumber(Web3.utils.toWei('' + price))
+            new BigNumber(Web3.utils.toWei('' + price)),
+            state.skillRewards
           );
         } catch(err) {
           console.error(err);
@@ -4564,13 +4583,15 @@ export function createStore(web3: Web3) {
         if(!CryptoBlades || !CharacterWaterTraitChangeConsumables || !Blacksmith || !state.defaultAccount) return;
 
         try {
-          await approveFeeWalletOnly(
+          await approveFeeWalletOrRewards(
+            CryptoBlades,
             CryptoBlades,
             SkillToken,
             state.defaultAccount,
             defaultCallOptions(state),
             defaultCallOptions(state),
-            new BigNumber(Web3.utils.toWei('' + price))
+            new BigNumber(Web3.utils.toWei('' + price)),
+            state.skillRewards
           );
         } catch(err) {
           console.error(err);
@@ -4613,13 +4634,15 @@ export function createStore(web3: Web3) {
         if(!CryptoBlades || !CharacterLightningTraitChangeConsumables || !Blacksmith || !state.defaultAccount) return;
 
         try {
-          await approveFeeWalletOnly(
+          await approveFeeWalletOrRewards(
+            CryptoBlades,
             CryptoBlades,
             SkillToken,
             state.defaultAccount,
             defaultCallOptions(state),
             defaultCallOptions(state),
-            new BigNumber(Web3.utils.toWei('' + price))
+            new BigNumber(Web3.utils.toWei('' + price)),
+            state.skillRewards
           );
         } catch(err) {
           console.error(err);
@@ -4661,13 +4684,15 @@ export function createStore(web3: Web3) {
         if(!CryptoBlades || !WeaponCosmetics || !Blacksmith || !state.defaultAccount) return;
 
         try {
-          await approveFeeWalletOnly(
+          await approveFeeWalletOrRewards(
+            CryptoBlades,
             CryptoBlades,
             SkillToken,
             state.defaultAccount,
             defaultCallOptions(state),
             defaultCallOptions(state),
-            new BigNumber(web3.utils.toWei('' + price, 'ether'))
+            new BigNumber(web3.utils.toWei('' + price, 'ether')),
+            state.skillRewards
           );
         } catch(err) {
           console.error(err);
@@ -4723,13 +4748,15 @@ export function createStore(web3: Web3) {
         if(!CryptoBlades || !CharacterCosmetics || !Blacksmith || !state.defaultAccount) return;
 
         try {
-          await approveFeeWalletOnly(
+          await approveFeeWalletOrRewards(
+            CryptoBlades,
             CryptoBlades,
             SkillToken,
             state.defaultAccount,
             defaultCallOptions(state),
             defaultCallOptions(state),
-            new BigNumber(web3.utils.toWei('' + price, 'ether'))
+            new BigNumber(web3.utils.toWei('' + price, 'ether')),
+            state.skillRewards
           );
         } catch(err) {
           console.error(err);
@@ -5009,13 +5036,15 @@ export function createStore(web3: Web3) {
       { nftContractAddr: string, tokenId: number, targetChain: string, bridgeFee: string }) {
         const { NFTStorage, CryptoBlades, SkillToken } = state.contracts();
         if (!NFTStorage || !CryptoBlades || !SkillToken || !state.defaultAccount) return;
-        await approveFeeWalletOnly(
+        await approveFeeWalletOrRewards(
+          CryptoBlades,
           CryptoBlades,
           SkillToken,
           state.defaultAccount,
           defaultCallOptions(state),
           defaultCallOptions(state),
-          new BigNumber(bridgeFee)
+          new BigNumber(bridgeFee),
+          state.skillRewards
         );
         await NFTStorage.methods
           .bridgeItem(nftContractAddr, tokenId, targetChain)
@@ -5559,13 +5588,15 @@ export function createStore(web3: Web3) {
         if(!CryptoBlades || !BurningManager || !SkillToken || !state.defaultAccount) return;
 
         const burnCost = await BurningManager.methods.burnCharactersFee(burnIds).call(defaultCallOptions(state));
-        await approveFeeWalletOnly(
+        await approveFeeWalletOrRewards(
+          CryptoBlades,
           CryptoBlades,
           SkillToken,
           state.defaultAccount,
           defaultCallOptions(state),
           defaultCallOptions(state),
-          new BigNumber(burnCost)
+          new BigNumber(burnCost),
+          state.skillRewards
         );
 
         await BurningManager.methods.burnCharactersIntoCharacter(burnIds, targetId).send({ from: state.defaultAccount });
@@ -5580,13 +5611,15 @@ export function createStore(web3: Web3) {
         if(!CryptoBlades || !BurningManager || !SkillToken || !state.defaultAccount) return;
 
         const burnCost = await BurningManager.methods.burnCharactersFee(burnIds).call(defaultCallOptions(state));
-        await approveFeeWalletOnly(
+        await approveFeeWalletOrRewards(
+          CryptoBlades,
           CryptoBlades,
           SkillToken,
           state.defaultAccount,
           defaultCallOptions(state),
           defaultCallOptions(state),
-          new BigNumber(burnCost)
+          new BigNumber(burnCost),
+          state.skillRewards
         );
 
         await BurningManager.methods.burnCharactersIntoSoul(burnIds).send({ from: state.defaultAccount });
@@ -5731,13 +5764,15 @@ export function createStore(web3: Web3) {
 
         if(orderWithSkill) {
           const price = await SpecialWeaponsManager.methods.getSkillForgeCost(orderOption).call(defaultCallOptions(state));
-          await approveFeeWalletOnly(
+          await approveFeeWalletOrRewards(
+            CryptoBlades,
             CryptoBlades,
             SkillToken,
             state.defaultAccount,
             defaultCallOptions(state),
             defaultCallOptions(state),
-            new BigNumber(price)
+            new BigNumber(price),
+            state.skillRewards
           );
           await SpecialWeaponsManager.methods.orderSpecialWeaponWithSkill(eventId, orderOption).send({ from: state.defaultAccount });
         }
