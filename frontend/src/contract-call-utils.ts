@@ -62,7 +62,7 @@ export async function approveFeeWalletOnly<T extends Contract<unknown>>(
     .send(approveOptsWithFrom);
 }
 
-export async function approveFeeDynamic<T extends Contract<unknown>>(
+export async function approveFeeFixed<T extends Contract<unknown>>(
   cryptoBladesContract: CryptoBladesAlias,
   feeContract: T,
   skillToken: Contracts['SkillToken'],
@@ -70,10 +70,9 @@ export async function approveFeeDynamic<T extends Contract<unknown>>(
   skillRewardsAvailable: string,
   callOpts: WithOptionalFrom<Web3JsCallOptions>,
   approveOpts: WithOptionalFrom<Web3JsSendOptions>,
-  fn: MethodsFunction<T>,
+  feeInSkill: BigNumber,
   { feeMultiplier, allowInGameOnlyFunds, allowSkillRewards }:
-  { feeMultiplier?: string | number, allowInGameOnlyFunds?: boolean, allowSkillRewards?: boolean } = {},
-  fnReturnsSkill: boolean = false,
+  { feeMultiplier?: string | number, allowInGameOnlyFunds?: boolean, allowSkillRewards?: boolean } = {}
 ) {
   const callOptsWithFrom: Web3JsCallOptions = { from, ...callOpts };
 
@@ -84,17 +83,6 @@ export async function approveFeeDynamic<T extends Contract<unknown>>(
   if(allowSkillRewards === undefined) {
     allowSkillRewards = true;
   }
-
-  let feeInSkill = new BigNumber(
-    fnReturnsSkill ?
-      await fn(feeContract.methods).call(callOptsWithFrom) :
-      await getFeeInSkillFromUsdFromAnyContract(
-        cryptoBladesContract,
-        feeContract,
-        callOptsWithFrom,
-        fn
-      )
-  );
 
   if(feeMultiplier !== undefined) {
     feeInSkill = feeInSkill.times(feeMultiplier);
@@ -123,6 +111,45 @@ export async function approveFeeDynamic<T extends Contract<unknown>>(
     callOpts,
     approveOpts,
     feeInSkill
+  );
+}
+
+export async function approveFeeDynamic<T extends Contract<unknown>>(
+  cryptoBladesContract: CryptoBladesAlias,
+  feeContract: T,
+  skillToken: Contracts['SkillToken'],
+  from: NonNullable<Web3JsCallOptions['from']>,
+  skillRewardsAvailable: string,
+  callOpts: WithOptionalFrom<Web3JsCallOptions>,
+  approveOpts: WithOptionalFrom<Web3JsSendOptions>,
+  fn: MethodsFunction<T>,
+  { feeMultiplier, allowInGameOnlyFunds, allowSkillRewards }:
+  { feeMultiplier?: string | number, allowInGameOnlyFunds?: boolean, allowSkillRewards?: boolean } = {},
+  fnReturnsSkill: boolean = false,
+) {
+  const callOptsWithFrom: Web3JsCallOptions = { from, ...callOpts };
+
+  let feeInSkill = new BigNumber(
+    fnReturnsSkill ?
+      await fn(feeContract.methods).call(callOptsWithFrom) :
+      await getFeeInSkillFromUsdFromAnyContract(
+        cryptoBladesContract,
+        feeContract,
+        callOptsWithFrom,
+        fn
+      )
+  );
+
+  return await approveFeeFixed(
+    cryptoBladesContract,
+    feeContract,
+    skillToken,
+    from,
+    skillRewardsAvailable,
+    callOpts,
+    approveOpts,
+    feeInSkill,
+    { feeMultiplier, allowInGameOnlyFunds, allowSkillRewards }
   );
 }
 
