@@ -33,7 +33,7 @@ import {
   StakeType
 } from './interfaces';
 import {getCharacterNameFromSeed} from './character-name';
-import {approveFee, approveFeeFromAnyContract, approveFeeWalletOnly, getFeeInSkillFromUsd} from './contract-call-utils';
+import {approveFee, approveFeeDynamic, approveFeeWalletOnly, getFeeInSkillFromUsd} from './contract-call-utils';
 
 import {burningManager as featureFlagBurningManager, raid as featureFlagRaid, stakeOnly as featureFlagStakeOnly} from './feature-flags';
 import {ERC20, IERC20, IERC721, INftStakingRewards, IStakingRewards} from '../../build/abi-interfaces';
@@ -1997,7 +1997,7 @@ export function createStore(web3: Web3) {
             });
         }
         else {
-          await approveFeeFromAnyContract(
+          await approveFeeDynamic(
             CryptoBlades,
             BurningManager,
             SkillToken,
@@ -2049,7 +2049,7 @@ export function createStore(web3: Web3) {
             });
         }
         else {
-          await approveFeeFromAnyContract(
+          await approveFeeDynamic(
             CryptoBlades,
             BurningManager,
             SkillToken,
@@ -2095,7 +2095,7 @@ export function createStore(web3: Web3) {
             });
         }
         else {
-          await approveFeeFromAnyContract(
+          await approveFeeDynamic(
             CryptoBlades,
             BurningManager,
             SkillToken,
@@ -2138,7 +2138,7 @@ export function createStore(web3: Web3) {
             });
         }
         else {
-          await approveFeeFromAnyContract(
+          await approveFeeDynamic(
             CryptoBlades,
             BurningManager,
             SkillToken,
@@ -2486,7 +2486,7 @@ export function createStore(web3: Web3) {
           return;
         }
 
-        await approveFeeFromAnyContract(
+        await approveFeeDynamic(
           CryptoBlades,
           Raid1,
           SkillToken,
@@ -3150,7 +3150,7 @@ export function createStore(web3: Web3) {
           .approve(NFTMarket.options.address, tokenId)
           .send(defaultCallOptions(state));
 
-        await approveFeeFromAnyContract(
+        await approveFeeDynamic(
           CryptoBlades,
           NFTMarket,
           SkillToken,
@@ -3188,7 +3188,7 @@ export function createStore(web3: Web3) {
         const { CryptoBlades, SkillToken, NFTMarket } = state.contracts();
         if(!CryptoBlades || !SkillToken || !NFTMarket || !state.defaultAccount) return;
 
-        await approveFeeFromAnyContract(
+        await approveFeeDynamic(
           CryptoBlades,
           NFTMarket,
           SkillToken,

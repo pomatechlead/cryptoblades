@@ -62,7 +62,7 @@ export async function approveFeeWalletOnly<T extends Contract<unknown>>(
     .send(approveOptsWithFrom);
 }
 
-export async function approveFeeFromAnyContract<T extends Contract<unknown>>(
+export async function approveFeeDynamic<T extends Contract<unknown>>(
   cryptoBladesContract: CryptoBladesAlias,
   feeContract: T,
   skillToken: Contracts['SkillToken'],
@@ -136,7 +136,7 @@ export async function approveFee(
   fn: CryptoBladesMethodsFunction,
   opts: { feeMultiplier?: string | number, allowInGameOnlyFunds?: boolean } = {}
 ) {
-  return await approveFeeFromAnyContract(
+  return await approveFeeDynamic(
     cryptoBladesContract,
     cryptoBladesContract,
     skillToken,
