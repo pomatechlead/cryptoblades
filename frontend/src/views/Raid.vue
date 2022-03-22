@@ -1,7 +1,167 @@
 <template>
   <div class="main-font">
     <div class="row">
-      <div class="col-md-12 col-lg-6">
+      <div class="col-md-3 col-lg-3 d-flex align-items-center justify-content-center" style="background-color:#000; font-size: 20px;font-family:Trajan">
+        SIDEBAR <br> COMPONENT <br> HERE
+      </div>
+       <div class="col-md-9 col-lg-9">
+        <div class="row">
+          <div class="col-lg-12" id="raid-header">
+            <div class="row">
+                <!-- <div class="boss-list">
+                  <img :src="getBossArt(raidIndex)" class="img-responsive" />
+                </div> -->
+              <!-- <div class="boss-list">
+                <div class="boss">
+                  <img src="../assets/raid-bosses/raid_monster_1.png" class="img-responsive"/>
+                </div>
+                <div class="boss">
+                  <img src="../assets/raid-bosses/raid_monster_2.png" class="img-responsive"/>
+                </div>
+                <div class="boss">
+                  <img src="../assets/raid-bosses/raid_monster_3.png" class="img-responsive"/>
+                </div>
+                <div class="boss">
+                  <img src="../assets/raid-bosses/raid_monster_4.png" class="img-responsive"/>
+                </div>
+              </div> -->
+              <div class="col-lg-4">
+                <div class="boss-list">
+                  <img :src="getBossArt(raidIndex)" class="img-responsive" />
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="boss-details">
+                  <div>
+                    <span :class="traitNumberToName(bossTrait).toLowerCase() + '-icon trait-icon'" />
+                    <div class="boss-name">
+                        <h3>{{ bossName }}</h3>
+                        <div>
+                          <span>{{$t('raid.title')}}</span> &nbsp; | &nbsp;
+                          <span>{{ traitNumberToName(bossTrait).toLowerCase() }} Element</span> |
+                          <span>+{{ xpReward }} EXP</span>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="boss-history">
+                    Messenger ravens flood the skies with news of the Seers visions. Heralds are heard throughout the cities and towns proclaiming.
+                    “All ye that are able of body and strong of heart are called upon to serve in the kings legion to combat a new enemy"
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-12">
+             <div class="row raid-power">
+              <div class="col-lg-4">
+                <div class="row">
+                  <div class="col-lg-12 nav-raid">
+                    <div>
+                      <p>PREPARATON</p>
+                    </div>
+                  </div>
+                    <div class="col-lg-12 powers">
+                      <div>
+                        <span>Multiplier</span>
+                        <p>x{{ currentMultiplier }}</p>
+                      </div>
+                      <div style="border-right:none">
+                        <span>Power</span>
+                        <p>{{ currentCharacterPower }}</p>
+                      </div>
+                  </div>
+                  <div class="col-lg-12 drops">
+                     <span>Character</span>
+                     <div class="char-info">
+                        <span :class="traitNumberToName(currentCharacter.trait).toLowerCase() + '-icon trait-icon'" />
+                        <div>
+                          <p class="name bold character-name"> {{getCleanCharacterName(currentCharacterId)}} </p>
+                          <span class="subtext subtext-stats">
+                            <b>{{$t('CharacterDisplay.level')}}</b>
+                            <span>{{ currentCharacter.level + 1 }}</span>
+                            | <span style="text-transform:capitalize">{{ traitNumberToName(currentCharacter.trait).toLowerCase() }} Element</span>
+                          </span>
+                        </div>
+                      </div>
+                  </div>
+                  <div class="col-lg-12 drops">
+                     <span>Weapon</span>
+                     <div class="weapon-info">
+                       <div>
+                         <p>WEAPON COMPONENT HERE</p>
+                         <span>Other Description Here</span>
+                       </div>
+                       <img src="../assets/swithc-wep.png" alt="">
+                     </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-8">
+                <div class="row">
+                  <div class="col-lg-12 nav-raid">
+                    <div>
+                      <p>RAID SIGNUP</p>
+                    </div>
+                    <div>
+                      <p>HISTORY</p>
+                    </div>
+                  </div>
+                  <div class="col-lg-12 powers">
+                      <div>
+                        <span>{{$t('raid.numberOfRaiders')}}</span>
+                        <p>{{ raiderCount }}</p>
+                      </div>
+                      <div>
+                        <span>{{$t('raid.totalPower')}}</span>
+                        <p>{{ totalPower }}</p>
+                      </div>
+                      <div>
+                        <span>{{$t('raid.bossPower')}}</span>
+                        <p>{{ bossPower }}</p>
+                      </div>
+                      <div>
+                        <span> {{$t('raid.victoryChance')}}</span>
+                        <p>{{ formattedWinChance }}</p>
+                      </div>
+                  </div>
+                  <div class="col-lg-12 drops">
+                    <span>Chance to {{$t('raid.drops')}}</span>
+                      <div class="drops-icons">
+                        <nft-icon :isDefault="true" :nft="{ type: 'weapon' }" />
+                        <nft-icon :isDefault="true" :nft="{ type: 'trinket' }"/>
+                        <nft-icon :isDefault="true" :nft="{ type: 'junk' }"/>
+                        <nft-icon :isDefault="true" :nft="{ type: 'secret' }"/>
+                        <nft-icon :isDefault="true" :nft="{ type: 'lbdust' }"/>
+                        <nft-icon :isDefault="true" :nft="{ type: '4bdust' }"/>
+                        <nft-icon :isDefault="true" :nft="{ type: '5bdust' }"/>
+                      </div>
+                  </div>
+                  <div class="col-lg-12 join-raid">
+                    <button class="btn-raid"  v-tooltip="$t('raid.joiningCostStamina', {formatStaminaHours})" @click="joinRaidMethod()">
+                      JOIN RAID
+                      <span>{{remainingTime}}</span>
+                    </button>
+                    <div>
+                      <p>Joining will cost</p>
+                      <span>{{ staminaCost }} {{$t('raid.stamina')}}</span>|
+                      <span>{{ durabilityCost }} {{$t('raid.durability')}}</span> |
+                      <span>
+                        <CurrencyConverter
+                        :skill="convertWeiToSkill(joinCost)"
+                        :minDecimals="0"
+                        :maxDecimals="5"/>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="row">
+      <div class="col-md-12 col-lg-12">
         <span class="bold raid-title-section">{{$t('raid.title')}}</span>
         <hr class="divider">
         <div class="row boss-row">
@@ -117,8 +277,8 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="container">
+    </div> -->
+    <!-- <div class="container">
       <div class="row">
         <div class="col-12">
           <div class="text-center">
@@ -131,7 +291,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="row">
       <div class="col-sm-12">
         <div class="raid-info-box mt-3">
@@ -206,11 +366,11 @@
 
 import Vue from 'vue';
 import {mapActions, mapGetters, mapMutations, mapState} from 'vuex';
-import CharacterList from '../components/smart/CharacterList.vue';
-import WeaponGrid from '../components/smart/WeaponGrid.vue';
+// import CharacterList from '../components/smart/CharacterList.vue';
+// import WeaponGrid from '../components/smart/WeaponGrid.vue';
 import BigButton from '../components/BigButton.vue';
-import WeaponIcon from '../components/WeaponIcon.vue';
-import Hint from '../components/Hint.vue';
+// import WeaponIcon from '../components/WeaponIcon.vue';
+// import Hint from '../components/Hint.vue';
 import NftIcon from '@/components/NftIcon.vue';
 import NftList, {NftIdType} from '@/components/smart/NftList.vue';
 import CurrencyConverter from '../components/CurrencyConverter.vue';
@@ -222,6 +382,7 @@ import {fromWeiEther, toBN} from '@/utils/common';
 import {staminaToHours} from '@/utils/date-time';
 import {BonusXp, Dust4b, Dust5b, DustLb, Junk, Keybox, RaidRewards, Weapon} from '@/interfaces/RaidRewards';
 import i18n from '@/i18n';
+import { getCleanName } from '../rename-censor';
 import BigNumber from 'bignumber.js';
 
 interface RaidMappedActions {
@@ -273,6 +434,7 @@ const dragonNames = [
   // 'Richard Melics',
 ];
 
+const moment = require('moment');
 const bossImages = [
   '../assets/raid-bosses/CB_Hellborn Brute.gif',
   '../assets/raid-bosses/CB_Hellborn Executioner.gif',
@@ -318,6 +480,8 @@ export default Vue.extend({
       participatingWeapons: [] as string[],
       bonuxXpCharacterNames: [] as string[],
       bonuxXpAmounts: [] as string[],
+      remainingTime: '',
+      traits:''
     };
   },
 
@@ -391,6 +555,23 @@ export default Vue.extend({
       } else {
         return 'green';
       }
+    },
+
+    getTimeRemaining(){
+      const eventTime = moment('2022-03-23');
+      const currentTime = moment(new Date());
+      const diffTime = eventTime - currentTime;
+      const interval = 1000;
+      let duration = moment.duration(diffTime * 1000, 'milliseconds');
+
+      setInterval(() => {
+        duration = moment.duration(duration - interval, 'milliseconds');
+        this.remainingTime = duration.days() +' days '+duration.hours() + ' hrs ' + duration.minutes() + ' mins ' + duration.seconds() + 'sec';
+      }, interval);
+    },
+
+    getCleanCharacterName(id: string): string {
+      return getCleanName(this.getCharacterName(id));
     },
 
     calculatePlayersProgressBarWidth(): string {
@@ -598,6 +779,7 @@ export default Vue.extend({
   },
 
   async mounted() {
+    this.getTimeRemaining();
     const refreshRaidData = async () => {
       await (this as any).getRewardIndexes();
       await (this as any).fetchRaidState();
@@ -611,6 +793,7 @@ export default Vue.extend({
     }, 3000);
   },
 
+
   beforeDestroy() {
     clearInterval(interval);
   },
@@ -618,12 +801,12 @@ export default Vue.extend({
   components: {
     CurrencyConverter,
     BigButton,
-    CharacterList,
-    WeaponGrid,
-    WeaponIcon,
-    Hint,
+    // CharacterList,
+    // WeaponGrid,
+    // WeaponIcon,
+    // Hint,
     NftIcon,
-    NftList
+    NftList,
   },
 });
 </script>
@@ -875,10 +1058,10 @@ hr.divider {
   flex-wrap: wrap;
   width: 100%;
   padding: 0;
-  overflow-y: auto;
+  overflow-y: hidden;
   overflow-x: hidden;
-  border: 0.5px solid #1f1f1f;
-  height: 161px;
+  /* border: 0.5px solid #1f1f1f; */
+  /* height: 161px; */
 }
 
 .drops-icons >>> ul {
@@ -886,6 +1069,66 @@ hr.divider {
   flex-direction: row;
   flex-wrap: wrap;
 }
+
+
+.btn-raid {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  align-items: center;
+  vertical-align: middle;
+  justify-content: center;
+  background-image: url('../assets/buttonOutline.svg');
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  object-fit: fill;
+  padding: 20px 40px 20px 40px;
+  border: none;
+  font-family: Oswald;
+  color: #fff;
+  font-size: 20px;
+}
+
+.btn-raid > span{
+  font-size: 13px;
+  font-family: Roboto;
+  color:#a3773e;
+}
+
+.join-raid{
+  display: flex;
+  margin-top: 50px;
+  align-items: center;
+}
+
+.join-raid > div > span{
+  text-transform: capitalize;
+}
+
+.join-raid > div{
+  margin-left: 20px;
+}
+
+.join-raid > div > p{
+  font-size: 17px;
+  font-family: Roboto;
+  margin: 0px;
+}
+
+.join-raid > div > span{
+  font-size: 14px;
+  font-family: Roboto;
+  color: #fff;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.join-raid > div > span:nth-child(1){
+  padding-left: 0px !important;
+}
+
+
 
 .drops-icons::-webkit-scrollbar-track
 {
@@ -1020,6 +1263,194 @@ hr.divider {
 .header-row {
   display: block;
   text-align: center;
+}
+
+.boss-details > div{
+  display: flex;
+}
+
+@font-face {
+    font-family: 'Trajan';
+    src: url('../assets/fonts/Trajan.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+#raid-header{
+  overflow: hidden;
+}
+
+#raid-header > div:nth-child(1){
+  background-image: url('../assets/bg_raid.png') ;
+}
+
+
+.boss-details > div > div >h3{
+  font-family: Trajan;
+}
+
+.boss-list{
+  position: absolute;
+  gap: 20px;
+}
+
+.boss-list > div{
+  margin-bottom: 20px;
+}
+
+.boss-list > img{
+  width: 350px;
+}
+
+.boss-name > div > span{
+  font-family: 'Roboto', 'serif';
+  color: #fff;
+  font-size: 13px;
+}
+
+.boss-details > div > span{
+  margin-right: 20px;
+}
+
+.boss-details{
+  padding-top: 40px;
+  padding-bottom: 85px;
+}
+
+/* .raid-power{
+} */
+
+.raid-power > div:nth-child(1){
+  border-right: 1px solid rgba(255, 255, 255, 0.138);
+}
+
+
+
+.nav-raid {
+  margin-top: -60px;
+  display: flex;
+  background-color: rgba(0, 0, 0, 0.289);
+}
+
+.powers{
+  padding-top: 40px;
+}
+
+.powers, .nav-raid, .drops, .join-raid{
+  padding-left: 50px;
+}
+
+.nav-raid > div {
+  margin-right: 20px;
+  padding: 20px 30px;
+}
+
+.nav-raid > div:nth-child(1) {
+  border-bottom: 3px solid #ccae4f;
+}
+
+.nav-raid > div > p{
+  font-family: 'Oswald', sans-serif;
+  color: #fff;
+  font-size: 19px;
+  margin: 0px;
+}
+
+.boss-details > div{
+  margin-bottom: 20px;
+}
+
+.boss-name > div >span:nth-child(1){
+  text-transform: capitalize;
+}
+
+.boss-name > div >span:nth-child(2){
+  text-transform: capitalize;
+}
+
+.boss-list > div > img{
+  width: 40%;
+}
+
+@font-face {
+  font-family: 'Trajan';
+  src: url('../assets/fonts/Trajan.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.char-info{
+  display: flex;
+  margin-top: 10px;
+}
+
+.char-info .character-name{
+  font-family: Trajan;
+  color: #fff;
+  margin: 0px;
+}
+
+.char-info > div{
+  margin-left: 20px;
+}
+
+.weapon-info{
+  display: flex;
+  justify-content: space-between;
+}
+
+.weapon-info > div > p{
+  color: #fff;
+  margin: 0px;
+}
+
+.weapon-info > div > span{
+  /* color: #fff; */
+}
+
+
+.weapon-info > img{
+  width: 30px;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap');
+
+.powers{
+  display: flex;
+}
+
+.powers > div{
+  padding-right: 40px;
+  padding-left: 40px;
+}
+
+.powers > div:nth-child(1){
+  padding-left: 0px;
+}
+
+.powers > div:nth-child(1), .powers > div:nth-child(2), .powers > div:nth-child(3){
+  border-right: 1px solid rgba(255, 255, 255, 0.433);
+}
+
+.powers > div > p{
+  font-family: 'Oswald', sans-serif;
+  color: #fff;
+  font-size: 25px;
+}
+
+.powers > div > span{
+  font-family: 'Roboto', sans-serif;
+  font-size: 15px;
+}
+
+.drops > span{
+  font-family: Roboto;
+}
+
+
+.boss-history{
+  font-family: 'Roboto', 'serif';
+  font-size: 13px;
 }
 
 @media (max-width: 994px) {
