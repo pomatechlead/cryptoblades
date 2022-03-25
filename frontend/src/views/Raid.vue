@@ -1,30 +1,10 @@
 <template>
   <div class="main-font">
     <div class="row">
-      <div class="col-md-3 col-lg-3 d-flex align-items-center justify-content-center" style="background-color:#000; font-size: 20px;font-family:Trajan">
-        SIDEBAR <br> COMPONENT <br> HERE
-      </div>
-       <div class="col-md-9 col-lg-9">
+       <div class="col-md-12 col-lg-12">
         <div class="row">
           <div class="col-lg-12" id="raid-header">
             <div class="row">
-                <!-- <div class="boss-list">
-                  <img :src="getBossArt(raidIndex)" class="img-responsive" />
-                </div> -->
-              <!-- <div class="boss-list">
-                <div class="boss">
-                  <img src="../assets/raid-bosses/raid_monster_1.png" class="img-responsive"/>
-                </div>
-                <div class="boss">
-                  <img src="../assets/raid-bosses/raid_monster_2.png" class="img-responsive"/>
-                </div>
-                <div class="boss">
-                  <img src="../assets/raid-bosses/raid_monster_3.png" class="img-responsive"/>
-                </div>
-                <div class="boss">
-                  <img src="../assets/raid-bosses/raid_monster_4.png" class="img-responsive"/>
-                </div>
-              </div> -->
               <div class="col-lg-4">
                 <div class="boss-list">
                   <img :src="getBossArt(raidIndex)" class="img-responsive" />
@@ -73,25 +53,42 @@
                   <div class="col-lg-12 drops">
                      <span>Character</span>
                      <div class="char-info">
-                        <span :class="traitNumberToName(currentCharacter.trait).toLowerCase() + '-icon trait-icon'" />
+                        <div  div class="art" :style="'background-image: url('+getCharacterArt(currentCharacter)+')'">
+                            .
+                        </div>
                         <div>
+                          <!-- <img :src="getCharacterArt(currentCharacter)" alt="KNIGHTS"> -->
                           <p class="name bold character-name"> {{getCleanCharacterName(currentCharacterId)}} </p>
                           <span class="subtext subtext-stats">
-                            <b>{{$t('CharacterDisplay.level')}}</b>
-                            <span>{{ currentCharacter.level + 1 }}</span>
-                            | <span style="text-transform:capitalize">{{ traitNumberToName(currentCharacter.trait).toLowerCase() }} Element</span>
+                            <p style="text-transform:capitalize"><span :class="traitNumberToName(currentCharacter.trait).toLowerCase()
+                            + '-icon trait-icon char-icon'" /> {{ traitNumberToName(currentCharacter.trait).toLowerCase() }} Element</p>
+                            <span><b>{{$t('CharacterDisplay.level')}}{{ currentCharacter.level + 1 }}</b></span>
                           </span>
                         </div>
                       </div>
                   </div>
                   <div class="col-lg-12 drops">
                      <span>Weapon</span>
-                     <div class="weapon-info">
+                     <div class="weapon-info col-sm-6" v-if="selectedWeapon">
                        <div>
-                         <p>WEAPON COMPONENT HERE</p>
-                         <span>Other Description Here</span>
+                          <weapon-inventory class="weapon-icon" :weapon="selectedWeapon" :displayType="'raid'"/>
                        </div>
-                       <img src="../assets/swithc-wep.png" alt="">
+                       <div @click="changeEquipedWeapon()">
+                          <img src="../assets/swithc-wep.png" alt="">
+                       </div>
+                     </div>
+                     <div class="weapon-info col-sm-6" v-else>
+                       <div class="outline-box">
+                          <div>
+                            <div @click="changeEquipedWeapon()">
+                              <img src="../assets/swithc-wep.png" alt="">
+                            </div>
+                          </div>
+                          <div>
+                            <p>No Weapon</p>
+                            <span>Click the icon to equip a weapon</span>
+                          </div>
+                       </div>
                      </div>
                   </div>
                 </div>
@@ -292,11 +289,68 @@
         </div>
       </div>
     </div> -->
-    <div class="row">
+    <b-modal id="rewardsModal" hide-footer hide-header>
+     <div>
+        <div class="tob-bg-img promotion-decoration">
+          <img class="vertical-decoration bottom" src="../assets/header-ads.png">
+        </div>
+      <div class="results-panel">
+        <div class="float-center">
+          <h1 class="text-center outcome pt-4 pb-2">{{$t('raid.raidSuccess')}}</h1>
+              <b-col class="you-earned-raid text-center">
+                <h4>{{$t('raid.gotXP', {xpReward})}}</h4>
+              </b-col>
+          <b-container v-if="bonuxXpCharacterNames && bonuxXpCharacterNames.length > 0">
+            <b-row>
+              <b-col cols="12"  lg="12" sm="12" md="12" class="win-details">
+                <h5 class="ins">{{$t('raid.gotBonusXP')}}</h5>
+              </b-col>
+            </b-row>
+          </b-container>
+          <b-container v-if="bonuxXpCharacterNames && bonuxXpCharacterNames.length > 0">
+            <b-row class="power-rolled" v-for="i in bonuxXpCharacterNames.length" :key="i">
+              <b-col cols="4" lg="5" sm="4" md="4" class="win-details">
+                <h5> {{bonuxXpCharacterNames[i - 1]}}</h5>
+              </b-col>
+              <b-col cols="4" lg="2" sm="4" md="4" class="win-details">
+                <img src="../assets/arrow-right.png" alt="">
+              </b-col>
+              <b-col cols="4" lg="5" sm="4" md="4" class="win-details">
+                <h5>+{{bonuxXpAmounts[i - 1]}} XP</h5>
+              </b-col>
+            </b-row>
+        </b-container>
+          <b-container>
+            <b-row>
+              <b-col class="earned" lg="12">
+                <h5>{{$t('raid.loot')}}</h5>
+              </b-col>
+              <b-col lg="12">
+                <nft-list :showGivenNftIdTypes="true" :nftIdTypes="rewards" :isReward="true"/>
+              </b-col>
+            </b-row>
+          </b-container>
+          <button class="btn-raid" style="margin:auto">
+            {{$t('raid.claimRewards')}}
+          </button>
+        </div>
+      </div>
+        <div class="bot-bg-img promotion-decoration">
+          <img src="../assets/separator.png">
+        </div>
+      </div>
+      <div class="footer-close">
+          <p class="tap"> {{$t('combat.tabAnywhere')}}</p>
+          <span @click="$bvModal.hide('rewardsModal')"><img style="margin: auto;width: 40px !important;" src="../assets/close-btn.png" alt=""></span>
+      </div>
+    </b-modal>
+
+    <!-- JUST NEED TO COMMENT HERE TO MAKE SURE I MAKING IT RIGHT -->
+    <!-- <div class="row">
       <div class="col-sm-12">
         <div class="raid-info-box mt-3">
-          <div class="row raid-summary-container">
-            <div class='col-sm-4 raid-summary-text'>
+          <div class="row raid-summary-container"> -->
+            <!-- <div class='col-sm-4 raid-summary-text'>
               <div class="float-lg-left mb-sm-2">
                 <div class="finish">
                     <span class="title">{{$t('raid.finishesOn')}}</span>
@@ -305,8 +359,8 @@
                     <span class="title">{{$t('raid.raidStatus')}}</span> {{ raidStatus }}
                   </div>
               </div>
-            </div>
-            <div class="col-sm-8 row">
+            </div> -->
+            <!-- <div class="col-sm-8 row">
               <big-button v-if="claimButtonActive" class="encounter-button btn-styled" :mainText="$t('raid.claimRewards')" @click="promptRewardClaim()" />
               <b-modal id="rewardsRaidPicker" :title="$t('raid.raidRewardsSelector')" @ok="claimRewardIndex(rewardsRaidId)">
                 <div class="raid-picker">
@@ -316,63 +370,30 @@
                   </select>
                 </div>
               </b-modal>
-
-            <b-modal id="rewardsModal" :title="$t('raid.raidRewards')" size="lg">
-              <template #modal-header>
-                <div v-if="!spin" class="new-weapon-header-text text-center">
-                  <strong>{{$t('raid.rewards')}}</strong>
-                </div>
-                <div v-if="spin" class="new-weapon-header-text text-center">
-                  <strong>{{$t('raid.claimingRewards')}}</strong>
-                </div>
-              </template>
-              <div class="text-center">
-                <b-spinner v-if="spin" type="grow" :label="$t('raid.loading')"></b-spinner>
-                <b-spinner v-if="spin" type="grow" :label="$t('raid.loading')"></b-spinner>
-                <b-spinner v-if="spin" type="grow" :label="$t('raid.loading')"></b-spinner>
-              </div>
-              <div class="text-center" v-if="!spin">
-                <strong>{{$t('raid.gotXP', {xpReward})}}</strong><br>
-                <div v-if="bonuxXpCharacterNames && bonuxXpCharacterNames.length > 0">
-                  <strong>{{$t('raid.gotBonusXP')}}</strong>
-                  <br>
-                  <span v-for="i in bonuxXpCharacterNames.length" :key="i">
-                    {{bonuxXpCharacterNames[i - 1]}}: +{{bonuxXpAmounts[i - 1]}} XP<br>
-                  </span>
-                </div>
-                <br>
-                <p class="h2 text-center"><u>{{$t('raid.loot')}}</u></p>
-              </div>
-              <nft-list v-if="!spin" :showGivenNftIdTypes="true" :nftIdTypes="rewards" :isReward="true"/>
-            </b-modal>
-
               <big-button class="encounter-button btn-styled" :mainText="$t('raid.signUp')"
-                          v-tooltip="$t('raid.joiningCostStamina', {formatStaminaHours})" @click="joinRaidMethod()" />
-            </div>
-            <div class='col-sm-4 raid-summary-text'>
+                     v-tooltip="$t('raid.joiningCostStamina', {formatStaminaHours})" @click="joinRaidMethod()" />
+            </div> -->
+            <!-- <div class='col-sm-4 raid-summary-text'>
              <div class="float-lg-right text-sm-center mt-sm-2 text-center">
                 <div class="finish">
                     <span class="title">{{$t('raid.yourPower')}}  {{accountPower}}</span>
                   </div>
               </div>
-            </div>
-          </div>
+            </div> -->
+          <!-- </div>
           </div>
         </div>
-    </div>
+    </div> -->
  </div>
 </template>
 <script lang="ts">
 
 import Vue from 'vue';
 import {mapActions, mapGetters, mapMutations, mapState} from 'vuex';
-// import CharacterList from '../components/smart/CharacterList.vue';
-// import WeaponGrid from '../components/smart/WeaponGrid.vue';
-import BigButton from '../components/BigButton.vue';
-// import WeaponIcon from '../components/WeaponIcon.vue';
-// import Hint from '../components/Hint.vue';
+import { getCharacterArt } from '../character-arts-placeholder';
 import NftIcon from '@/components/NftIcon.vue';
 import NftList, {NftIdType} from '@/components/smart/NftList.vue';
+import WeaponInventory from '../components/WeaponInvetory.vue';
 import CurrencyConverter from '../components/CurrencyConverter.vue';
 import {GetTotalMultiplierForTrait, IWeapon} from '@/interfaces/Weapon';
 import {IRaidState, IState} from '@/interfaces';
@@ -382,6 +403,7 @@ import {fromWeiEther, toBN} from '@/utils/common';
 import {staminaToHours} from '@/utils/date-time';
 import {BonusXp, Dust4b, Dust5b, DustLb, Junk, Keybox, RaidRewards, Weapon} from '@/interfaces/RaidRewards';
 import i18n from '@/i18n';
+import Events from '../events';
 import { getCleanName } from '../rename-censor';
 import BigNumber from 'bignumber.js';
 
@@ -459,6 +481,7 @@ export default Vue.extend({
   data() {
     return {
       selectedWeaponId: '',
+      selectedWeapon: null,
       raidIndex: '',
       bossName: '',
       raiderCount: '',
@@ -546,7 +569,7 @@ export default Vue.extend({
     calculateWinChance(): string {
       return (Math.min(Math.max(+this.totalPower / +this.bossPower / 2 * 100, 0), 99.99)).toFixed(2);
     },
-
+    getCharacterArt,
     calculateProgressBarColor(): string {
       if(+this.calculateWinChance() < 30){
         return '#ccae4f';
@@ -557,8 +580,12 @@ export default Vue.extend({
       }
     },
 
+    changeEquipedWeapon(){
+      Events.$emit('weapon-inventory', true);
+    },
+
     getTimeRemaining(){
-      const eventTime = moment('2022-03-23');
+      const eventTime = moment('2022-03-25');
       const currentTime = moment(new Date());
       const diffTime = eventTime - currentTime;
       const interval = 1000;
@@ -778,6 +805,7 @@ export default Vue.extend({
     }
   },
 
+
   async mounted() {
     this.getTimeRemaining();
     const refreshRaidData = async () => {
@@ -791,6 +819,12 @@ export default Vue.extend({
     interval = window.setInterval(async () => {
       await refreshRaidData();
     }, 3000);
+
+    (this as any).$bvModal.show('rewardsModal');
+    Events.$on('setActiveWeapon', (weapon: any) =>{
+      this.selectedWeapon = weapon;
+      this.selectedWeaponId = weapon.id;
+    });
   },
 
 
@@ -800,11 +834,7 @@ export default Vue.extend({
 
   components: {
     CurrencyConverter,
-    BigButton,
-    // CharacterList,
-    // WeaponGrid,
-    // WeaponIcon,
-    // Hint,
+    WeaponInventory,
     NftIcon,
     NftList,
   },
@@ -949,12 +979,117 @@ hr.divider {
   border: 0;
   background: none;
 }
+
+.outline-box{
+  display: flex;
+  align-items: center;
+  opacity: 0.5;
+}
+
+.outline-box > div:nth-child(1){
+  height: 70px;
+  width: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: #ccae4f dashed 2px;
+  border-radius: 5px;
+}
+
+.outline-box > div:nth-child(2) {
+  padding-left: 20px;
+}
+
+.weapon-info{
+  margin-top: 10px;
+}
+
+.outline-box > div > p{
+  margin: 0px;
+  font-size: 15px;
+  font-family: Roboto;
+}
+
+.outline-box > div > span{
+  margin: 0px;
+  font-size: 13px;
+  font-family: Roboto;
+}
+
+.outline-box > div > div {
+  cursor: pointer;
+}
+
+
+.outline-box > div > div > img{
+  width: 30px;
+}
+
+.boss-list > img{
+  animation-name: easeLeft;
+  animation-duration: 1.5s;
+}
+
+
+@keyframes easeLeft {
+  0%   {
+    margin-left: 100px;
+    opacity: 0;
+  }
+  100%  {
+    margin-left: 0px;
+    opacity: 1;
+  }
+}
+
+.boss-details{
+  animation-name: easeUp;
+  animation-duration: 1.5s;
+}
+
+@keyframes easeUp {
+  0%   {
+    margin-top: 100px;
+    opacity: 0;
+  }
+  100%  {
+    margin-top: 0px;
+    opacity: 1;
+  }
+}
+
 .list-group-item {
   border-top: 0px !important;
   border-left: 0px !important;
   border-right: 0px !important;
   border-bottom: 0.5px solid #242423 !important;
 }
+
+.you-earned-raid{
+  margin-bottom: 10px;
+}
+
+.results-panel > div > div {
+    margin-bottom: 20px;
+}
+
+.you-earned-raid > h4{
+  text-align: center;
+  font-size: 1.3em;
+  color: #fff;
+  font-family: 'Roboto', 'serif'  !important;
+}
+
+.power-rolled .win-details:nth-child(1) {
+    text-align: right;
+}
+
+.power-rolled .win-details > h5{
+    color: #fff !important;
+}
+
+
+
 .body {
   display: flex;
   flex-direction: row;
@@ -1088,6 +1223,18 @@ hr.divider {
   font-family: Oswald;
   color: #fff;
   font-size: 20px;
+}
+
+.art{
+  height: 70px;
+  width: 70px;
+  border-radius: 5px;
+  border: 1px solid #fff;
+  background-position: inherit;
+  background-position-x: -20px;
+  background-position-y: 10px;
+  background-size: 150%;
+  background-repeat: no-repeat;
 }
 
 .btn-raid > span{
@@ -1381,6 +1528,7 @@ hr.divider {
 
 .char-info{
   display: flex;
+  flex-wrap: nowrap;
   margin-top: 10px;
 }
 
@@ -1390,9 +1538,25 @@ hr.divider {
   margin: 0px;
 }
 
-.char-info > div{
+.char-icon{
+  margin-left: 1px;
+  font-size: 13px;
+   /* margin-top: 10px; */
+}
+
+.char-info > div:nth-child(2){
   margin-left: 20px;
 }
+
+.char-info > div:nth-child(2) > span > p{
+  margin: 0px;
+  font-family: Roboto;
+}
+
+.char-info > div:nth-child(2) > span > span{
+  font-family: Roboto;
+}
+
 
 .weapon-info{
   display: flex;
@@ -1409,8 +1573,13 @@ hr.divider {
 }
 
 
-.weapon-info > img{
+.weapon-info > div > img{
   width: 30px;
+  cursor: pointer;
+}
+
+.weapon-info > div > img:hover{
+  margin-top: -10px;
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap');
@@ -1453,6 +1622,26 @@ hr.divider {
   font-size: 13px;
 }
 
+@media (max-width: 600px) {
+  .float-center .container .power-rolled {
+    padding: 0px !important;
+    width: 50% !important;
+  }
+
+  .win-details > .ins{
+    width: 60%;
+    margin: auto;
+  }
+
+  .results-panel > div > div {
+    margin-bottom: 20px;
+  }
+
+  .powers > div > span{
+    font-size: 2vw;
+  }
+}
+
 @media (max-width: 994px) {
 
   img.img-responsive {
@@ -1469,6 +1658,16 @@ hr.divider {
   .finish {
     text-align: center;
     margin: 10px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .boss-col {
+    display: block;
+  }
+
+  .powers > div > span{
+    font-size: 1.1vw;
   }
 }
 

@@ -8,8 +8,8 @@
         <!-- :class="!featureFlagStakeOnly && currentCharacterId !== null ? 'bg-image' : ''"> -->
           <router-view v-if="canShowApp" />
         </b-col>
-        <WeaponRowGrid v-if="showWeapon" v-model="currentWeaponId" :checkForDurability="true"/>
       </b-row>
+      <WeaponRowGrid v-if="showWeapon" v-model="currentWeaponId" :checkForDurability="true"/>
     </div>
     <div class="content dark-bg-text" v-if="!canShowApp">
       {{$t('app.cantView')}}

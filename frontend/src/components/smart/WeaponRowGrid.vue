@@ -50,27 +50,29 @@
         </div>
         <!-------------------------------->
       </div>
-
-      <ul class="weapon-grid">
-        <li
-          class="weapon"
-          :class="{ selected: highlight !== null && weapon.id === highlight }"
-          v-for="weapon in nonIgnoredWeapons"
-          :key="weapon.id"
-          @click="(!checkForDurability || getWeaponDurability(weapon.id) > 0) && onWeaponClick(weapon.id)"
-          @contextmenu="canFavorite && toggleFavorite($event, weapon.id)" @dblclick="canFavorite && toggleFavorite($event, weapon.id)">
-          <nft-options-dropdown v-if="showNftOptions" :nftType="'weapon'" :nftId="weapon.id" :options="options" :showTransfer="!isMarket" class="nft-options"/>
-          <div class="weapon-icon-wrapper">
-            <weapon-inventory class="weapon-icon" :weapon="weapon" :favorite="isFavorite(weapon.id)" :displayType="'inventory'"/>
-          </div>
-          <div class="above-wrapper" v-if="$slots.above || $scopedSlots.above">
-            <slot name="above" :weapon="weapon"></slot>
-          </div>
-          <slot name="sold" :weapon="weapon">
-          </slot>
-        </li>
-      </ul>
-
+      <div class="scroll-weapon">
+        <ul class="weapon-grid">
+          <li
+            class="weapon"
+            :class="{ selected: highlight !== null && weapon.id === highlight }"
+            v-for="weapon in nonIgnoredWeapons"
+            :key="weapon.id"
+            @click="(!checkForDurability || getWeaponDurability(weapon.id) > 0) && onWeaponClick(weapon)"
+            @contextmenu="canFavorite && toggleFavorite($event, weapon.id)"
+            @dblclick="canFavorite && toggleFavorite($event, weapon.id)">
+            <nft-options-dropdown v-if="showNftOptions" :nftType="'weapon'" :nftId="weapon.id"
+            :options="options" :showTransfer="!isMarket" class="nft-options"/>
+            <div class="weapon-icon-wrapper">
+              <weapon-inventory class="weapon-icon" :weapon="weapon" :favorite="isFavorite(weapon.id)" :displayType="'inventory'"/>
+            </div>
+            <div class="above-wrapper" v-if="$slots.above || $scopedSlots.above">
+              <slot name="above" :weapon="weapon"></slot>
+            </div>
+            <slot name="sold" :weapon="weapon">
+            </slot>
+          </li>
+        </ul>
+      </div>
       <b-modal class="centered-modal" ref="weapon-rename-modal"
           @ok="renameWeaponCall()">
           <template #modal-title>
@@ -410,11 +412,12 @@ export default Vue.extend({
       this.maxPriceFilter= '';
       this.$emit('weapon-filters-changed');
     },
-    onWeaponClick(id: number) {
-      this.setCurrentWeapon(id);
-      this.$emit('chooseweapon', id);
-      this.$emit('choose-weapon', id);
+    onWeaponClick(weapon: any) {
+      this.setCurrentWeapon(weapon.id);
+      this.$emit('chooseweapon', weapon.id);
+      this.$emit('choose-weapon', weapon.id);
       Events.$emit('weapon-inventory', false);
+      Events.$emit('setActiveWeapon', weapon);
     },
     checkStorageFavorite() {
       const favoritesFromStorage = localStorage.getItem('favorites');
@@ -532,6 +535,12 @@ export default Vue.extend({
   grid-template-columns: repeat(auto-fit, 14em);
   gap: 0.5em;
 }
+
+.scroll-weapon{
+  overflow-x:auto;
+  height: 80vh;
+}
+
 .weapon {
   width: 25em;
   border-radius: 5px;
@@ -611,14 +620,13 @@ export default Vue.extend({
 
 /* for change weapon compnent */
 .change-weapon{
-  position: absolute;
+  position: fixed;
   right: 0;
   top: 0;
   height: 100vh;
   width: 450px;
   z-index: 9999;
   background-color: rgb(27, 29, 24);
-  overflow-x:auto;
 }
 
 .cw-content h4{
