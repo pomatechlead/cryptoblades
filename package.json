@@ -14,10 +14,14 @@
     "abdk-libraries-solidity": "2.4.0",
     "dayjs": "^1.10.7",
     "dotenv": "^8.2.0",
+<<<<<<< HEAD
     "gsap": "^3.9.1",
     "moment": "^2.29.1",
     "vue-multiselect": "^2.1.6",
     "vue-owl-carousel": "^2.0.3"
+=======
+    "vue-multiselect": "^2.1.6"
+>>>>>>> 190be3deaba8801814c6db707752ef488178fde9
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.2",
