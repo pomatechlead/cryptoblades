@@ -1,7 +1,8 @@
 <template>
   <div class="main-font">
     <div class="row">
-       <div class="col-md-12 col-lg-12">
+       <div class="col-md-4 col-lg-3 col-sm-2">dsd</div>
+       <div class="col-md-8 col-lg-9 col-sm-10">
         <div class="row">
           <div class="col-lg-12" id="raid-header">
             <div class="row">
@@ -10,7 +11,7 @@
                   <img :src="getBossArt(raidIndex)" class="img-responsive" />
                 </div>
               </div>
-              <div class="col-lg-6">
+              <div class="col-lg-8">
                 <div class="boss-details">
                   <div>
                     <span :class="traitNumberToName(bossTrait).toLowerCase() + '-icon trait-icon'" />
@@ -23,10 +24,27 @@
                         </div>
                     </div>
                   </div>
-                  <div class="boss-history">
+                  <div class="col-lg-12 join-raid">
+                    <button class="btn-raid"  v-tooltip="$t('raid.joiningCostStamina', {formatStaminaHours})" @click="joinRaidMethod()">
+                      JOIN RAID
+                      <span>{{remainingTime}}</span>
+                    </button>
+                    <div>
+                      <p>Joining will cost</p>
+                      <span>{{ staminaCost }} {{$t('raid.stamina')}}</span>|
+                      <span>{{ durabilityCost }} {{$t('raid.durability')}}</span> |
+                      <span>
+                        <CurrencyConverter
+                        :skill="convertWeiToSkill(joinCost)"
+                        :minDecimals="0"
+                        :maxDecimals="5"/>
+                      </span>
+                    </div>
+                  </div>
+                  <!-- <div class="boss-history">
                     Messenger ravens flood the skies with news of the Seers visions. Heralds are heard throughout the cities and towns proclaiming.
                     “All ye that are able of body and strong of heart are called upon to serve in the kings legion to combat a new enemy"
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </div>
@@ -133,7 +151,7 @@
                         <nft-icon :isDefault="true" :nft="{ type: '5bdust' }"/>
                       </div>
                   </div>
-                  <div class="col-lg-12 join-raid">
+                  <!-- <div class="col-lg-12 join-raid">
                     <button class="btn-raid"  v-tooltip="$t('raid.joiningCostStamina', {formatStaminaHours})" @click="joinRaidMethod()">
                       JOIN RAID
                       <span>{{remainingTime}}</span>
@@ -149,7 +167,7 @@
                         :maxDecimals="5"/>
                       </span>
                     </div>
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </div>
@@ -1639,6 +1657,19 @@ hr.divider {
 
   .powers > div > span{
     font-size: 2vw;
+  }
+
+  img.img-responsive {
+    height: 450px !important;
+    margin-left: 100px;
+  }
+
+  .boss-list > img{
+    width: 400px;
+  }
+
+  .boss-history{
+    display: none;
   }
 }
 
