@@ -1,8 +1,8 @@
 <template>
   <div class="main-font">
     <div class="row">
-       <div class="col-md-4 col-lg-3 col-sm-2">dsd</div>
-       <div class="col-md-8 col-lg-9 col-sm-10">
+       <div class="col-md-4 col-lg-3 col-sm-2 col-2">dsd</div>
+       <div class="col-md-8 col-lg-9 col-sm-10 col-10">
         <div class="row">
           <div class="col-lg-12" id="raid-header">
             <div class="row">
@@ -12,33 +12,43 @@
                 </div>
               </div>
               <div class="col-lg-8">
+                <div class="boxShadow">.</div>
                 <div class="boss-details">
                   <div>
-                    <span :class="traitNumberToName(bossTrait).toLowerCase() + '-icon trait-icon'" />
                     <div class="boss-name">
+                      <div>
+                        <div class="elements">
+                          <div class="frame-element">.</div>
+                          <span :class="traitNumberToName(bossTrait).toLowerCase() + '-icon trait-icon'" />
+                        </div>
                         <h3>{{ bossName }}</h3>
+                      </div>
                         <div>
                           <span>{{$t('raid.title')}}</span> &nbsp; | &nbsp;
-                          <span>{{ traitNumberToName(bossTrait).toLowerCase() }} Element</span> |
+                          <span class="none-mobile">{{ traitNumberToName(bossTrait).toLowerCase() }} Element</span> |
                           <span>+{{ xpReward }} EXP</span>
                         </div>
                     </div>
                   </div>
-                  <div class="col-lg-12 join-raid">
-                    <button class="btn-raid"  v-tooltip="$t('raid.joiningCostStamina', {formatStaminaHours})" @click="joinRaidMethod()">
-                      JOIN RAID
-                      <span>{{remainingTime}}</span>
-                    </button>
-                    <div>
-                      <p>Joining will cost</p>
-                      <span>{{ staminaCost }} {{$t('raid.stamina')}}</span>|
-                      <span>{{ durabilityCost }} {{$t('raid.durability')}}</span> |
-                      <span>
-                        <CurrencyConverter
-                        :skill="convertWeiToSkill(joinCost)"
-                        :minDecimals="0"
-                        :maxDecimals="5"/>
-                      </span>
+                  <div class="col-lg-12 raid-countDown no-padding">
+                    <p class="no-margin">Next Raid ({{new Date(expectedFinishTime).toDateString()}})</p>
+                    <div class="w-limit">
+                        <div class="day">
+                          <p>{{ zeroPad(remainingTime.days, 2) }}</p>
+                          <span>{{ remainingTime.days > 1 ? 'DAYS' : 'DAY'}}</span>
+                        </div>
+                        <div class="hoour">
+                          <p>{{ zeroPad(remainingTime.hours, 2)}}</p>
+                          <span>{{ remainingTime.hours > 1 ? 'HRS' : 'HR'}}</span>
+                        </div>
+                        <div class="min">
+                          <p>{{ zeroPad(remainingTime.minutes, 2)}}</p>
+                          <span>{{ remainingTime.minutes > 1 ? 'MINS' : 'MIN'}}</span>
+                        </div>
+                        <div class="sec">
+                          <p>{{ zeroPad(remainingTime.seconds, 2)}}</p>
+                          <span>{{ remainingTime.seconds > 1 ? 'SEC' : 'SEC'}}</span>
+                        </div>
                     </div>
                   </div>
                   <!-- <div class="boss-history">
@@ -51,7 +61,7 @@
           </div>
           <div class="col-lg-12">
              <div class="row raid-power">
-              <div class="col-lg-4">
+              <div class="col-lg-4 none-mobile">
                 <div class="row">
                   <div class="col-lg-12 nav-raid">
                     <div>
@@ -87,7 +97,7 @@
                   </div>
                   <div class="col-lg-12 drops">
                      <span>Weapon</span>
-                     <div class="weapon-info col-sm-6" v-if="selectedWeapon">
+                     <div class="weapon-info" v-if="selectedWeapon">
                        <div>
                           <weapon-inventory class="weapon-icon" :weapon="selectedWeapon" :displayType="'raid'"/>
                        </div>
@@ -95,7 +105,7 @@
                           <img src="../assets/swithc-wep.png" alt="">
                        </div>
                      </div>
-                     <div class="weapon-info col-sm-6" v-else>
+                     <div class="weapon-info" v-else>
                        <div class="outline-box">
                           <div>
                             <div @click="changeEquipedWeapon()">
@@ -117,29 +127,34 @@
                     <div>
                       <p>RAID SIGNUP</p>
                     </div>
-                    <div>
+                      <div class="drop-chance none-desktop" @click="viewLoot()">
+                        <p>Click to View Drop Chance</p>
+                        <p class="raid-loot"></p>
+                      </div>
+                    <!-- <div>
                       <p>HISTORY</p>
-                    </div>
+                    </div> -->
                   </div>
                   <div class="col-lg-12 powers">
                       <div>
                         <span>{{$t('raid.numberOfRaiders')}}</span>
-                        <p>{{ raiderCount }}</p>
+                        <p>23,30{{ raiderCount }}</p>
                       </div>
                       <div>
                         <span>{{$t('raid.totalPower')}}</span>
-                        <p>{{ totalPower }}</p>
+                        <p>33,61{{ totalPower }}</p>
                       </div>
                       <div>
                         <span>{{$t('raid.bossPower')}}</span>
-                        <p>{{ bossPower }}</p>
+                        <p>67,521{{ bossPower }}</p>
                       </div>
                       <div>
                         <span> {{$t('raid.victoryChance')}}</span>
-                        <p>{{ formattedWinChance }}</p>
+                        <!-- <p>7{{ formattedWinChance }}</p> -->
+                        <p>70%</p>
                       </div>
                   </div>
-                  <div class="col-lg-12 drops">
+                  <div class="col-lg-12 drops none-mobile">
                     <span>Chance to {{$t('raid.drops')}}</span>
                       <div class="drops-icons">
                         <nft-icon :isDefault="true" :nft="{ type: 'weapon' }" />
@@ -150,11 +165,14 @@
                         <nft-icon :isDefault="true" :nft="{ type: '4bdust' }"/>
                         <nft-icon :isDefault="true" :nft="{ type: '5bdust' }"/>
                       </div>
+                      <!-- <div class="drop-chance">
+                        <p class="raid-loot">.</p>
+                      </div> -->
                   </div>
-                  <!-- <div class="col-lg-12 join-raid">
+                  <div class="col-lg-12 join-raid">
                     <button class="btn-raid"  v-tooltip="$t('raid.joiningCostStamina', {formatStaminaHours})" @click="joinRaidMethod()">
                       JOIN RAID
-                      <span>{{remainingTime}}</span>
+                      <!-- <span>{{remainingTime}}</span> -->
                     </button>
                     <div>
                       <p>Joining will cost</p>
@@ -167,7 +185,7 @@
                         :maxDecimals="5"/>
                       </span>
                     </div>
-                  </div> -->
+                  </div>
                 </div>
               </div>
             </div>
@@ -363,6 +381,43 @@
       </div>
     </b-modal>
 
+    <b-modal id="viewLoot" hide-footer hide-header>
+     <div>
+        <div class="tob-bg-img promotion-decoration">
+          <img class="vertical-decoration bottom" src="../assets/header-ads.png">
+        </div>
+      <div class="results-panel">
+        <div class="float-center">
+          <b-col class="drops-loot text-center">
+            <h4>DROP CHANCE</h4>
+          </b-col>
+          <b-container>
+            <b-row>
+              <b-col cols="12"  lg="12" sm="12" md="12" class="win-details">
+                <div class="drops-icons mobile-modal">
+                  <nft-icon :isDefault="true" :nft="{ type: 'weapon' }" />
+                  <nft-icon :isDefault="true" :nft="{ type: 'trinket' }"/>
+                  <nft-icon :isDefault="true" :nft="{ type: 'junk' }"/>
+                  <nft-icon :isDefault="true" :nft="{ type: 'secret' }"/>
+                  <nft-icon :isDefault="true" :nft="{ type: 'lbdust' }"/>
+                  <nft-icon :isDefault="true" :nft="{ type: '4bdust' }"/>
+                  <nft-icon :isDefault="true" :nft="{ type: '5bdust' }"/>
+                </div>
+              </b-col>
+            </b-row>
+          </b-container>
+        </div>
+      </div>
+        <div class="bot-bg-img promotion-decoration">
+          <img src="../assets/separator.png">
+        </div>
+      </div>
+      <div class="footer-close">
+          <p class="tap"> Click anywhere to continue</p>
+          <span @click="$bvModal.hide('rewardsModal')"><img style="margin: auto;width: 40px !important;" src="../assets/close-btn.png" alt=""></span>
+      </div>
+    </b-modal>
+
     <!-- JUST NEED TO COMMENT HERE TO MAKE SURE I MAKING IT RIGHT -->
     <!-- <div class="row">
       <div class="col-sm-12">
@@ -474,7 +529,7 @@ const dragonNames = [
   // 'Richard Melics',
 ];
 
-const moment = require('moment');
+// const moment = require('moment');
 const bossImages = [
   '../assets/raid-bosses/CB_Hellborn Brute.gif',
   '../assets/raid-bosses/CB_Hellborn Executioner.gif',
@@ -521,7 +576,12 @@ export default Vue.extend({
       participatingWeapons: [] as string[],
       bonuxXpCharacterNames: [] as string[],
       bonuxXpAmounts: [] as string[],
-      remainingTime: '',
+      remainingTime: {
+        days: 0,
+        hours: 0,
+        minutes: 0,
+        seconds: 0
+      },
       traits:''
     };
   },
@@ -602,16 +662,24 @@ export default Vue.extend({
       Events.$emit('weapon-inventory', true);
     },
 
+    viewLoot(){
+      (this as any).$bvModal.show('viewLoot');
+    },
+
     getTimeRemaining(){
-      const eventTime = moment('2022-03-25');
-      const currentTime = moment(new Date());
-      const diffTime = eventTime - currentTime;
       const interval = 1000;
-      let duration = moment.duration(diffTime * 1000, 'milliseconds');
+      const ref = this;
 
       setInterval(() => {
-        duration = moment.duration(duration - interval, 'milliseconds');
-        this.remainingTime = duration.days() +' days '+duration.hours() + ' hrs ' + duration.minutes() + ' mins ' + duration.seconds() + 'sec';
+        const eventTime = new Date('Mar 30, 2022 15:37:25').getTime();
+        const currentTime = new Date().getTime();
+        const diffTime = eventTime - currentTime;
+        const d = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+        const h = Math.floor((diffTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((diffTime % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((diffTime % (1000 * 60)) / 1000);
+
+        ref.remainingTime = {days:d,hours:h,minutes:m,seconds:s};
       }, interval);
     },
 
@@ -805,6 +873,11 @@ export default Vue.extend({
       return bossImages[+this.raidIndex % bossImages.length];
     },
 
+    zeroPad(num: any, places: any) {
+      const zero = places - num.toString().length + 1;
+      return Array(+(zero > 0 && zero)).join('0') + num;
+    },
+
     processRaidData(): void {
       const raidData = this.getRaidState();
       this.raidIndex = raidData.index;
@@ -838,7 +911,7 @@ export default Vue.extend({
       await refreshRaidData();
     }, 3000);
 
-    (this as any).$bvModal.show('rewardsModal');
+    // (this as any).$bvModal.show('rewardsModal');
     Events.$on('setActiveWeapon', (weapon: any) =>{
       this.selectedWeapon = weapon;
       this.selectedWeaponId = weapon.id;
@@ -860,6 +933,13 @@ export default Vue.extend({
 </script>
 
 <style scoped>
+
+@font-face {
+    font-family: 'Trajan';
+    src: url('../assets/fonts/Trajan.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
 
 .raid-height {
   height: 500px !important;
@@ -1358,6 +1438,21 @@ hr.divider {
     padding-right: 30px;
 }
 
+.elements{
+  margin-right: 20px;
+  margin-top: 5px;
+}
+
+.elements > div{
+  position: absolute;
+  height: 30px;
+  width: 30px;
+  margin-left: -18px;
+  margin-top: -4px;
+  border: 1px solid #ccae4f;
+  transform: rotate(45deg);
+}
+
 .raid-picker {
   display: flex;
   align-items: center;
@@ -1434,11 +1529,27 @@ hr.divider {
   display: flex;
 }
 
-@font-face {
-    font-family: 'Trajan';
-    src: url('../assets/fonts/Trajan.ttf');
-    font-weight: normal;
-    font-style: normal;
+
+
+.drop-chance .raid-loot{
+  background-image: url('../assets/chest.png');
+  background-position: center;
+  background-size: cover;
+  height: 150px;
+  width: 155px;
+  margin-right: -100px;
+}
+
+.drop-chance{
+  position: absolute;
+  right:0;
+  margin-top: -50px;
+}
+
+.drop-chance > p:nth-child(1){
+  font-size: 3vw;
+  margin: 0px;
+  margin-bottom: -10px;
 }
 
 #raid-header{
@@ -1447,10 +1558,13 @@ hr.divider {
 
 #raid-header > div:nth-child(1){
   background-image: url('../assets/bg_raid.png') ;
+  background-repeat:no-repeat;
+  background-position: center;
+  background-size: cover;
 }
 
 
-.boss-details > div > div >h3{
+.boss-details > div > div > div >h3{
   font-family: Trajan;
 }
 
@@ -1464,7 +1578,57 @@ hr.divider {
 }
 
 .boss-list > img{
-  width: 350px;
+  width: 450px;
+}
+
+.boxShadow{
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.534), rgba(0, 0, 0, 0.021));
+}
+
+.boss-name > div > span{
+  font-family: 'Roboto', 'serif';
+  margin-left: 10px;
+  margin-right: 10px;
+  color: #fff;
+  font-size: 13px;
+}
+
+.w-limit{
+  display: flex;
+  border: 1px solid rgba(255, 255, 255, 0.342);
+  width: max-content;
+  padding: 10px;
+}
+
+.w-limit > div{
+  width: 5em;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.boss-name > div{
+  display: flex;
+}
+
+.raid-countDown{
+  display: flex;
+  flex-direction: column;
+}
+
+.raid-countDown .w-limit > div > p{
+  font-family: Oswald;
+  color: #fff;
+  font-size: 35px;
+  margin: 0px;
+}
+
+.boss-name > div > span:nth-child(1){
+  margin-left: 0px;
 }
 
 .boss-name > div > span{
@@ -1475,11 +1639,17 @@ hr.divider {
 
 .boss-details > div > span{
   margin-right: 20px;
+  margin-left: 20px;
+}
+
+.raid-countDown > p {
+  font-family: Trajan;
+  margin-bottom: 10px;
 }
 
 .boss-details{
   padding-top: 40px;
-  padding-bottom: 85px;
+  padding-bottom: 80px;
 }
 
 /* .raid-power{
@@ -1640,7 +1810,132 @@ hr.divider {
   font-size: 13px;
 }
 
+.none-desktop, .boxShadow{
+  display: none;
+}
+
+.none-mobile{
+  display: inline;
+}
+
 @media (max-width: 600px) {
+
+  .none-desktop, .boxShadow {
+    display: inline;
+  }
+
+  .none-mobile{
+    display: none;
+  }
+
+  .raid-countDown > p{
+    font-size: 4vw;
+  }
+
+  .drops-loot > h4{
+    font-family: Trajan;
+    font-weight: 600;
+    margin-top: 30px;
+  }
+
+  .drops-icons.mobile-modal{
+    justify-content: center;
+  }
+
+  #viewLoot > div {
+    font-family: Roboto;
+  }
+
+  #viewLoot .footer-close {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+
+  .powers{
+    flex-wrap: wrap;
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+
+  .boss-name > div:nth-child(1){
+    margin-left: 30px;
+  }
+
+  .boss-name > div:nth-child(2){
+    margin-left: 20px;
+  }
+
+  .join-raid > div > p{
+    text-align: center;
+    font-size: 3.5vw;
+  }
+
+  .join-raid > div > span{
+    font-size: 3vw;
+    text-align: center;
+  }
+
+
+  .raid-countDown .w-limit > div > p{
+    font-size: 7vw;
+  }
+
+  .raid-countDown .w-limit > div > span{
+    font-size: 3vw;
+  }
+
+  .w-limit > div{
+    width: 18vw;
+  }
+
+  .powers > div, .powers > div:nth-child(1){
+    padding:0px;
+    margin:0px;
+    width: 50%;
+    padding-left: 10px;
+    text-align: center;
+  }
+
+  .powers > div > span{
+    font-size: 0.7em !important;
+  }
+
+  .powers > div:nth-child(2){
+    border-right: none;
+  }
+
+  .powers > div:nth-child(3){
+    border-top: 1px solid rgba(255, 255, 255, 0.308);
+  }
+
+  .powers > div:nth-child(4){
+    border-top: 1px solid rgba(255, 255, 255, 0.315);
+  }
+
+  .raid-power{
+    padding-bottom: 20px;
+  }
+
+  .raid-power > div:nth-child(1){
+    order: 2 !important;
+  }
+
+  .raid-power > div:nth-child(2){
+    order: 1 !important;
+  }
+
+  .join-raid{
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    align-items:center;
+    padding-left: 0px;
+  }
+
+
   .float-center .container .power-rolled {
     padding: 0px !important;
     width: 50% !important;
@@ -1661,7 +1956,11 @@ hr.divider {
 
   img.img-responsive {
     height: 450px !important;
-    margin-left: 100px;
+    margin-left: 20vw;
+  }
+
+  .nav-raid > div{
+    padding-left: 0px;
   }
 
   .boss-list > img{
@@ -1671,6 +1970,11 @@ hr.divider {
   .boss-history{
     display: none;
   }
+
+  .boss-details{
+      padding-top: 80px;
+  }
+
 }
 
 @media (max-width: 994px) {
