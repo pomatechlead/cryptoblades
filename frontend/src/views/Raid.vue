@@ -1,8 +1,8 @@
 <template>
   <div class="main-font">
     <div class="row">
-       <div class="col-md-4 col-lg-3 col-sm-2 col-2">dsd</div>
-       <div class="col-md-8 col-lg-9 col-sm-10 col-10">
+       <!-- <div class="col-md-4 col-lg-3 col-sm-2 col-2">dsd</div> -->
+       <div class="col-md-12 col-lg-12 col-sm-12 col-12">
         <div class="row">
           <div class="col-lg-12" id="raid-header">
             <div class="row">
