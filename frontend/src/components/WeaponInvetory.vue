@@ -14,7 +14,7 @@
     </div>
 
     <!-- adventure selected weapon display  (MOBILE VIEW)-->
-    <div class="displayed-weapon" v-if="displayType == 'adventure' && isMobile()">
+    <div class="displayed-weapon" v-if="displayType === 'adventure' && isMobile()">
         <div :class="'weapon-img img-adventure frame-'+ (weapon.stars || 0)">
           <!-- WEAPON ID -->
           <div class="id">{{$t('weaponIcon.id')}} {{ weapon.id }}</div>
@@ -29,9 +29,8 @@
     </div>
 
 
-
     <!-- adventure selected weapon display  (DESKTOP VIEW)-->
-    <div v-if="displayType == 'adventure' && !isMobile()" class="glow-container" ref="el">
+    <div v-if="displayType === 'adventure' && !isMobile()" class="glow-container" ref="el">
       <div class="weapon-flex">
         <div :class="'weapon-img-desktop frame-'+ (weapon.stars || 0)">
             <!-- WEAPON ID -->
@@ -152,7 +151,7 @@
 
 
     <!-- inventory selected weapon list display -->
-    <div v-if="displayType == 'inventory'" class="glow-container" ref="el">
+    <div v-if="displayType === 'inventory'" class="glow-container" ref="el">
       <div class="weapon-flex">
         <div :class="'weapon-img frame-'+ (weapon.stars || 0)">
             <!-- WEAPON ID -->
@@ -325,9 +324,9 @@ export default {
       hover: false,
       allLoaded: false,
       allLoadStarted: false,
-      showPlaceholder: false,
       loadCount: 0,
       loadCountTotal: 0,
+      showPlaceholder: false
     };
   },
 

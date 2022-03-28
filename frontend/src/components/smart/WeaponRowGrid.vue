@@ -50,29 +50,27 @@
         </div>
         <!-------------------------------->
       </div>
-      <div class="scroll-weapon">
-        <ul class="weapon-grid">
-          <li
-            class="weapon"
-            :class="{ selected: highlight !== null && weapon.id === highlight }"
-            v-for="weapon in nonIgnoredWeapons"
-            :key="weapon.id"
-            @click="(!checkForDurability || getWeaponDurability(weapon.id) > 0) && onWeaponClick(weapon)"
-            @contextmenu="canFavorite && toggleFavorite($event, weapon.id)"
-            @dblclick="canFavorite && toggleFavorite($event, weapon.id)">
-            <nft-options-dropdown v-if="showNftOptions" :nftType="'weapon'" :nftId="weapon.id"
-            :options="options" :showTransfer="!isMarket" class="nft-options"/>
-            <div class="weapon-icon-wrapper">
-              <weapon-inventory class="weapon-icon" :weapon="weapon" :favorite="isFavorite(weapon.id)" :displayType="'inventory'"/>
-            </div>
-            <div class="above-wrapper" v-if="$slots.above || $scopedSlots.above">
-              <slot name="above" :weapon="weapon"></slot>
-            </div>
-            <slot name="sold" :weapon="weapon">
-            </slot>
-          </li>
-        </ul>
-      </div>
+
+      <ul class="weapon-grid">
+        <li
+          class="weapon"
+          :class="{ selected: highlight !== null && weapon.id === highlight }"
+          v-for="weapon in nonIgnoredWeapons"
+          :key="weapon.id"
+          @click="(!checkForDurability || getWeaponDurability(weapon.id) > 0) && onWeaponClick(weapon.id)"
+          @contextmenu="canFavorite && toggleFavorite($event, weapon.id)" @dblclick="canFavorite && toggleFavorite($event, weapon.id)">
+          <nft-options-dropdown v-if="showNftOptions" :nftType="'weapon'" :nftId="weapon.id" :options="options" :showTransfer="!isMarket" class="nft-options"/>
+          <div class="weapon-icon-wrapper">
+            <weapon-inventory class="weapon-icon" :weapon="weapon" :favorite="isFavorite(weapon.id)" :displayType="'inventory'"/>
+          </div>
+          <div class="above-wrapper" v-if="$slots.above || $scopedSlots.above">
+            <slot name="above" :weapon="weapon"></slot>
+          </div>
+          <slot name="sold" :weapon="weapon">
+          </slot>
+        </li>
+      </ul>
+
       <b-modal class="centered-modal" ref="weapon-rename-modal"
           @ok="renameWeaponCall()">
           <template #modal-title>
@@ -526,6 +524,8 @@ export default Vue.extend({
    margin-bottom: 20px;
 }
 .weapon-grid {
+  overflow-x: scroll;
+  height: 80vh;
   list-style-type: none;
   justify-content: left;
   margin: 0;
