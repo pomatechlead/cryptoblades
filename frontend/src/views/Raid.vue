@@ -25,29 +25,29 @@
                       </div>
                         <div>
                           <span>{{$t('raid.title')}}</span> &nbsp; | &nbsp;
-                          <span class="none-mobile">{{ traitNumberToName(bossTrait).toLowerCase() }} Element</span> |
-                          <span>+{{ xpReward }} EXP</span>
+                          <span class="none-mobile">{{ traitNumberToName(bossTrait).toLowerCase() }} {{$t('raid.element')}}</span> |
+                          <span>+{{ xpReward }} {{$t('raid.exp')}}</span>
                         </div>
                     </div>
                   </div>
                   <div class="col-lg-12 raid-countDown no-padding">
-                    <p class="no-margin">Next Raid ({{new Date(expectedFinishTime).toDateString()}})</p>
+                    <p class="no-margin">{{$t('raid.nextRaid')}} ({{new Date(expectedFinishTime).toDateString()}})</p>
                     <div class="w-limit">
                         <div class="day">
                           <p>{{ zeroPad(remainingTime.days, 2) }}</p>
-                          <span>{{ remainingTime.days > 1 ? 'DAYS' : 'DAY'}}</span>
+                          <span>{{ remainingTime.days > 1 ? $t('raid.days') : $t('raid.day') }}</span>
                         </div>
                         <div class="hoour">
                           <p>{{ zeroPad(remainingTime.hours, 2)}}</p>
-                          <span>{{ remainingTime.hours > 1 ? 'HRS' : 'HR'}}</span>
+                          <span>{{ remainingTime.hours > 1 ? $t('raid.hrs') : $t('raid.hr')}}</span>
                         </div>
                         <div class="min">
                           <p>{{ zeroPad(remainingTime.minutes, 2)}}</p>
-                          <span>{{ remainingTime.minutes > 1 ? 'MINS' : 'MIN'}}</span>
+                          <span>{{ remainingTime.minutes > 1 ? $t('raid.mins') : $t('raid.min')}}</span>
                         </div>
                         <div class="sec">
                           <p>{{ zeroPad(remainingTime.seconds, 2)}}</p>
-                          <span>{{ remainingTime.seconds > 1 ? 'SEC' : 'SEC'}}</span>
+                          <span>{{ remainingTime.seconds > 1 ? $t('raid.sec') : $t('raid.sec')}}</span>
                         </div>
                     </div>
                   </div>
@@ -65,21 +65,21 @@
                 <div class="row">
                   <div class="col-lg-12 nav-raid">
                     <div>
-                      <p>PREPARATION</p>
+                      <p>{{$t('raid.preparation')}}</p>
                     </div>
                   </div>
                     <div class="col-lg-12 powers">
                       <div>
-                        <span>Multiplier</span>
+                        <span>{{$t('PartneredProject.multiplier')}}</span>
                         <p>x{{ currentMultiplier }}</p>
                       </div>
                       <div style="border-right:none">
-                        <span>Power</span>
+                        <span>{{$t('pvp.power')}}</span>
                         <p>{{ currentCharacterPower }}</p>
                       </div>
                   </div>
                   <div class="col-lg-12 col-md-6 col-sm-12 drops">
-                     <span>Character</span>
+                     <span>{{$t('viewLink.viewLink')}}</span>
                      <div class="char-info">
                         <div  div class="art" :style="'background-image: url('+getCharacterArt(currentCharacter)+')'">
                             .
@@ -89,14 +89,14 @@
                           <p class="name bold character-name"> {{getCleanCharacterName(currentCharacterId)}} </p>
                           <span class="subtext subtext-stats">
                             <p style="text-transform:capitalize"><span :class="traitNumberToName(currentCharacter.trait).toLowerCase()
-                            + '-icon trait-icon char-icon'" /> {{ traitNumberToName(currentCharacter.trait).toLowerCase() }} Element</p>
+                            + '-icon trait-icon char-icon'" /> {{ traitNumberToName(currentCharacter.trait).toLowerCase() }} {{$t('raid.element')}}</p>
                             <span><b>{{$t('CharacterDisplay.level')}}{{ currentCharacter.level + 1 }}</b></span>
                           </span>
                         </div>
                       </div>
                   </div>
                   <div class="col-lg-12 col-md-5 col-sm-9 drops">
-                     <span>Weapon</span>
+                     <span>{{$t('raid.weapon')}}</span>
                      <div class="weapon-info" v-if="selectedWeapon">
                        <div>
                           <weapon-inventory class="weapon-icon" :weapon="selectedWeapon" :displayType="'raid'"/>
@@ -113,8 +113,8 @@
                             </div>
                           </div>
                           <div>
-                            <p>No Weapon</p>
-                            <span>Click the icon to equip a weapon</span>
+                            <p>{{$t('raid.noWeapon')}}</p>
+                            <span>{{$t('raid.clickToEquip')}}</span>
                           </div>
                        </div>
                      </div>
@@ -125,10 +125,10 @@
                 <div class="row">
                   <div class="col-lg-12 nav-raid">
                     <div>
-                      <p>RAID SIGNUP</p>
+                      <p>{{$t('raid.raidSignup')}}</p>
                     </div>
                       <div class="drop-chance none-desktop" @click="viewLoot()">
-                        <p>Click to View Drop Chance</p>
+                        <p>{{$t('raid.viewDropChance')}}</p>
                         <p class="raid-loot"></p>
                       </div>
                     <!-- <div>
@@ -138,24 +138,24 @@
                   <div class="col-lg-12 powers">
                       <div>
                         <span>{{$t('raid.numberOfRaiders')}}</span>
-                        <p>2,300,30{{ raiderCount }}</p>
+                        <p>{{ raiderCount }}</p>
                       </div>
                       <div>
                         <span>{{$t('raid.totalPower')}}</span>
-                        <p>3,300,61{{ totalPower }}</p>
+                        <p>{{ totalPower }}</p>
                       </div>
                       <div>
                         <span>{{$t('raid.bossPower')}}</span>
-                        <p>6,765,21{{ bossPower }}</p>
+                        <p>{{ bossPower }}</p>
                       </div>
                       <div>
                         <span> {{$t('raid.victoryChance')}}</span>
                         <!-- <p>7{{ formattedWinChance }}</p> -->
-                        <p>50%</p>
+                        <p>{{formattedWinChance}}</p>
                       </div>
                   </div>
                   <div class="col-lg-12 drops none-mobile">
-                    <span>Chance to {{$t('raid.drops')}}</span>
+                    <span>{{$t('raid.chanceTo')}} {{$t('raid.drops')}}</span>
                       <div class="drops-icons">
                         <nft-icon :isDefault="true" :nft="{ type: 'weapon' }" />
                         <nft-icon :isDefault="true" :nft="{ type: 'trinket' }"/>
@@ -171,13 +171,13 @@
                   </div>
                   <div class="col-lg-12 join-raid">
                     <button v-if="!isMobile()" class="btn-raid"  v-tooltip="$t('raid.joiningCostStamina', {formatStaminaHours})" @click="joinRaidMethod()">
-                      JOIN RAID
+                      {{$t('raid.joinRaid')}}
                     </button>
                      <button v-else class="btn-raid"  v-tooltip="$t('raid.joiningCostStamina', {formatStaminaHours})" @click="openEquipItems()">
-                      SIGN-UP
+                      {{$t('raid.signup')}}
                     </button>
                     <div>
-                      <p>Joining will cost</p>
+                      <p>{{$t('raid.joiningCost')}}</p>
                       <span>{{ staminaCost }} {{$t('raid.stamina')}}</span>|
                       <span>{{ durabilityCost }} {{$t('raid.durability')}}</span> |
                       <span>
@@ -390,23 +390,23 @@
           <b-container>
             <div class="col-lg-12 nav-modal">
               <div id="titleModal">
-                <p>PREPARATION</p>
+                <p>{{$t('raid.preparation')}}</p>
               </div>
             </div>
             <div class="col-lg-12">
                 <div class="row">
                   <div class="col-lg-12 powers">
                       <div>
-                        <span>Multiplier</span>
+                        <span>{{$t('PartneredProject.Multiplier')}}</span>
                         <p>x{{ currentMultiplier }}</p>
                       </div>
                       <div style="border-right:none">
-                        <span>Power</span>
+                        <span>{{$t('CharacterDisplay.power')}}</span>
                         <p>{{ currentCharacterPower }}</p>
                       </div>
                   </div>
                   <div class="col-lg-12 drops text-left">
-                     <span>Character</span>
+                     <span>{{$t('raid.character')}}</span>
                      <div class="char-info">
                         <div  div class="art" :style="'background-image: url('+getCharacterArt(currentCharacter)+')'">
                             .
@@ -416,14 +416,14 @@
                           <p class="name bold character-name"> {{getCleanCharacterName(currentCharacterId)}} </p>
                           <span class="subtext subtext-stats">
                             <p style="text-transform:capitalize"><span :class="traitNumberToName(currentCharacter.trait).toLowerCase()
-                            + '-icon trait-icon char-icon'" /> {{ traitNumberToName(currentCharacter.trait).toLowerCase() }} Element</p>
+                            + '-icon trait-icon char-icon'" /> {{ traitNumberToName(currentCharacter.trait).toLowerCase() }} {{$t('raid.element')}}</p>
                             <span><b>{{$t('CharacterDisplay.level')}}{{ currentCharacter.level + 1 }}</b></span>
                           </span>
                         </div>
                       </div>
                   </div>
                   <div class="col-lg-12 drops text-left">
-                     <span>Weapon</span>
+                     <span>{{$t('raid.weapon')}}</span>
                      <div class="weapon-info" v-if="selectedWeapon">
                        <div>
                           <weapon-inventory class="weapon-icon" :weapon="selectedWeapon" :displayType="'raid'"/>
@@ -440,8 +440,8 @@
                             </div>
                           </div>
                           <div>
-                            <p>No Weapon</p>
-                            <span>Click the icon to equip a weapon</span>
+                            <p>{{$t('raid.noWeapon')}}</p>
+                            <span>{{$t('raid.clickToEquip')}}</span>
                           </div>
                        </div>
                      </div>
@@ -454,7 +454,7 @@
       </div>
       <div class="footer-close d-flex justify-content-center">
         <button class="btn-raid btn-modal"  v-tooltip="$t('raid.joiningCostStamina', {formatStaminaHours})" @click="joinRaidMethod()">
-          JOIN RAID
+          {{$t('raid.joinRaid')}}
         </button>
       </div>
     </b-modal>
@@ -467,7 +467,7 @@
       <div class="results-panel">
         <div class="float-center">
           <b-col class="drops-loot text-center">
-            <h4>DROP CHANCE</h4>
+            <h4>{{$t('raid.dropChance')}}</h4>
           </b-col>
           <b-container>
             <b-row>
@@ -491,7 +491,7 @@
         </div>
       </div>
       <div class="footer-close">
-          <p class="tap"> Click anywhere to continue</p>
+          <p class="tap">{{$t('raid.clickAnywhere')}}</p>
           <span @click="$bvModal.hide('rewardsModal')"><img style="margin: auto;width: 40px !important;" src="../assets/close-btn.png" alt=""></span>
       </div>
     </b-modal>
