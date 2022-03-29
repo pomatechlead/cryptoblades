@@ -90,7 +90,7 @@
     </div>
 
     <!-- raid selected weapon display  (DESKTOP VIEW)-->
-    <div v-if="displayType == 'raid' && !isMobile()" class="glow-container" ref="el">
+    <div v-if="displayType === 'raid'" class="glow-container" ref="el">
       <div class="weapon-flex">
         <div :class="'weapon-img-desktop frame-'+ (weapon.stars || 0)" style="border-radius:5px">
             <!-- WEAPON ID -->

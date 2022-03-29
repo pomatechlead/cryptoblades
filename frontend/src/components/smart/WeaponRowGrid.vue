@@ -57,7 +57,7 @@
           :class="{ selected: highlight !== null && weapon.id === highlight }"
           v-for="weapon in nonIgnoredWeapons"
           :key="weapon.id"
-          @click="(!checkForDurability || getWeaponDurability(weapon.id) > 0) && onWeaponClick(weapon.id)"
+          @click="(!checkForDurability || getWeaponDurability(weapon.id) > 0) && onWeaponClick(weapon)"
           @contextmenu="canFavorite && toggleFavorite($event, weapon.id)" @dblclick="canFavorite && toggleFavorite($event, weapon.id)">
           <nft-options-dropdown v-if="showNftOptions" :nftType="'weapon'" :nftId="weapon.id" :options="options" :showTransfer="!isMarket" class="nft-options"/>
           <div class="weapon-icon-wrapper">
@@ -412,7 +412,7 @@ export default Vue.extend({
     },
     onWeaponClick(weapon: any) {
       this.setCurrentWeapon(weapon.id);
-      this.$emit('chooseweapon', weapon.id);
+      Events.$emit('chooseweapon', weapon.id);
       this.$emit('choose-weapon', weapon.id);
       Events.$emit('weapon-inventory', false);
       Events.$emit('setActiveWeapon', weapon);

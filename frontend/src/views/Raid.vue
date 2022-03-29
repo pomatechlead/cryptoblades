@@ -65,7 +65,7 @@
                 <div class="row">
                   <div class="col-lg-12 nav-raid">
                     <div>
-                      <p>PREPARATON</p>
+                      <p>PREPARATION</p>
                     </div>
                   </div>
                     <div class="col-lg-12 powers">
@@ -78,7 +78,7 @@
                         <p>{{ currentCharacterPower }}</p>
                       </div>
                   </div>
-                  <div class="col-lg-12 drops">
+                  <div class="col-lg-12 col-md-6 col-sm-12 drops">
                      <span>Character</span>
                      <div class="char-info">
                         <div  div class="art" :style="'background-image: url('+getCharacterArt(currentCharacter)+')'">
@@ -95,7 +95,7 @@
                         </div>
                       </div>
                   </div>
-                  <div class="col-lg-12 drops">
+                  <div class="col-lg-12 col-md-5 col-sm-9 drops">
                      <span>Weapon</span>
                      <div class="weapon-info" v-if="selectedWeapon">
                        <div>
@@ -138,20 +138,20 @@
                   <div class="col-lg-12 powers">
                       <div>
                         <span>{{$t('raid.numberOfRaiders')}}</span>
-                        <p>23,30{{ raiderCount }}</p>
+                        <p>2,300,30{{ raiderCount }}</p>
                       </div>
                       <div>
                         <span>{{$t('raid.totalPower')}}</span>
-                        <p>33,61{{ totalPower }}</p>
+                        <p>3,300,61{{ totalPower }}</p>
                       </div>
                       <div>
                         <span>{{$t('raid.bossPower')}}</span>
-                        <p>67,521{{ bossPower }}</p>
+                        <p>6,765,21{{ bossPower }}</p>
                       </div>
                       <div>
                         <span> {{$t('raid.victoryChance')}}</span>
                         <!-- <p>7{{ formattedWinChance }}</p> -->
-                        <p>70%</p>
+                        <p>50%</p>
                       </div>
                   </div>
                   <div class="col-lg-12 drops none-mobile">
@@ -170,9 +170,11 @@
                       </div> -->
                   </div>
                   <div class="col-lg-12 join-raid">
-                    <button class="btn-raid"  v-tooltip="$t('raid.joiningCostStamina', {formatStaminaHours})" @click="joinRaidMethod()">
+                    <button v-if="!isMobile()" class="btn-raid"  v-tooltip="$t('raid.joiningCostStamina', {formatStaminaHours})" @click="joinRaidMethod()">
                       JOIN RAID
-                      <!-- <span>{{remainingTime}}</span> -->
+                    </button>
+                     <button v-else class="btn-raid"  v-tooltip="$t('raid.joiningCostStamina', {formatStaminaHours})" @click="openEquipItems()">
+                      SIGN-UP
                     </button>
                     <div>
                       <p>Joining will cost</p>
@@ -378,6 +380,82 @@
       <div class="footer-close">
           <p class="tap"> {{$t('combat.tabAnywhere')}}</p>
           <span @click="$bvModal.hide('rewardsModal')"><img style="margin: auto;width: 40px !important;" src="../assets/close-btn.png" alt=""></span>
+      </div>
+    </b-modal>
+
+    <b-modal id="equipments" hide-footer hide-header>
+     <div class="d-flex align-items-center">
+      <div class="results-panel">
+        <div class="float-center">
+          <b-container>
+            <div class="col-lg-12 nav-modal">
+              <div id="titleModal">
+                <p>PREPARATION</p>
+              </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="row">
+                  <div class="col-lg-12 powers">
+                      <div>
+                        <span>Multiplier</span>
+                        <p>x{{ currentMultiplier }}</p>
+                      </div>
+                      <div style="border-right:none">
+                        <span>Power</span>
+                        <p>{{ currentCharacterPower }}</p>
+                      </div>
+                  </div>
+                  <div class="col-lg-12 drops text-left">
+                     <span>Character</span>
+                     <div class="char-info">
+                        <div  div class="art" :style="'background-image: url('+getCharacterArt(currentCharacter)+')'">
+                            .
+                        </div>
+                        <div>
+                          <!-- <img :src="getCharacterArt(currentCharacter)" alt="KNIGHTS"> -->
+                          <p class="name bold character-name"> {{getCleanCharacterName(currentCharacterId)}} </p>
+                          <span class="subtext subtext-stats">
+                            <p style="text-transform:capitalize"><span :class="traitNumberToName(currentCharacter.trait).toLowerCase()
+                            + '-icon trait-icon char-icon'" /> {{ traitNumberToName(currentCharacter.trait).toLowerCase() }} Element</p>
+                            <span><b>{{$t('CharacterDisplay.level')}}{{ currentCharacter.level + 1 }}</b></span>
+                          </span>
+                        </div>
+                      </div>
+                  </div>
+                  <div class="col-lg-12 drops text-left">
+                     <span>Weapon</span>
+                     <div class="weapon-info" v-if="selectedWeapon">
+                       <div>
+                          <weapon-inventory class="weapon-icon" :weapon="selectedWeapon" :displayType="'raid'"/>
+                       </div>
+                       <div @click="changeEquipedWeapon()">
+                          <img src="../assets/swithc-wep.png" alt="">
+                       </div>
+                     </div>
+                     <div class="weapon-info" v-else>
+                       <div class="outline-box">
+                          <div>
+                            <div @click="changeEquipedWeapon()">
+                              <img src="../assets/swithc-wep.png" alt="">
+                            </div>
+                          </div>
+                          <div>
+                            <p>No Weapon</p>
+                            <span>Click the icon to equip a weapon</span>
+                          </div>
+                       </div>
+                     </div>
+                  </div>
+                </div>
+              </div>
+          </b-container>
+        </div>
+      </div>
+      </div>
+      <div class="footer-close d-flex justify-content-center">
+        <button class="btn-raid btn-modal"  v-tooltip="$t('raid.joiningCostStamina', {formatStaminaHours})" @click="joinRaidMethod()">
+          JOIN RAID
+        </button>
       </div>
     </b-modal>
 
@@ -664,6 +742,9 @@ export default Vue.extend({
 
     viewLoot(){
       (this as any).$bvModal.show('viewLoot');
+    },
+    openEquipItems(){
+      (this as any).$bvModal.show('equipments');
     },
 
     getTimeRemaining(){
@@ -1240,6 +1321,8 @@ hr.divider {
   font-size: 1.4em;
 }
 
+
+
 .fill-space {
   height: 100%;
   padding: 1em;
@@ -1637,6 +1720,10 @@ hr.divider {
   font-size: 13px;
 }
 
+.vertical-decoration.bottom{
+  transform: rotate(35deg);
+}
+
 .boss-details > div > span{
   margin-right: 20px;
   margin-left: 20px;
@@ -1797,7 +1884,7 @@ hr.divider {
 
 .powers > div > span{
   font-family: 'Roboto', sans-serif;
-  font-size: 15px;
+  /* font-size: 15px; */
 }
 
 .drops > span{
@@ -1817,6 +1904,26 @@ hr.divider {
 .none-mobile{
   display: inline;
 }
+@media (max-width: 423px) {
+  .boss-details > div > div > div >h3{
+    font-size: 6vw;
+  }
+  .raid-countDown > p {
+    font-size: 4vw;
+  }
+
+  img.img-responsive[data-v-b43fac78] {
+    margin-left: 10vw;
+  }
+
+  .nav-raid > div > p {
+    font-size: 4.6vw;
+  }
+
+  .nav-raid{
+    padding-left: 17px;
+  }
+}
 
 @media (max-width: 600px) {
 
@@ -1824,6 +1931,41 @@ hr.divider {
     display: inline;
   }
 
+  .modal-dialog{
+    margin-top: 0px !important;
+  }
+
+  .nav-modal > div > p{
+    font-family: 'Oswald', sans-serif;
+    color: #fff;
+    font-size: 19px;
+    margin: 0px;
+  }
+
+  .modal-content{
+    border: 2px solid #ccae4f
+  }
+
+  #equipments___BV_modal_outer_ > div {
+    display: flex !important;
+    align-items: flex-end !important;
+  }
+
+  .drops.text-left{
+    padding-left: 15px;
+  }
+
+  .nav-modal{
+    justify-content: center;
+    margin-top: 0px;
+    display: flex;
+    background-color: rgba(0, 0, 0, 0.289);
+    padding: 20px 0px;
+  }
+
+  #titleModal{
+    padding: 20p 0px !important;
+  }
   .none-mobile{
     display: none;
   }
@@ -1888,7 +2030,7 @@ hr.divider {
   }
 
   .w-limit > div{
-    width: 18vw;
+    width: 15vw;
   }
 
   .powers > div, .powers > div:nth-child(1){
@@ -1975,13 +2117,69 @@ hr.divider {
       padding-top: 80px;
   }
 
+  .powers > div > span{
+    font-size: 3vw !important;
+  }
+
+  .powers > div > p {
+      color: #fff;
+      font-size: 5.8vw !important;
+  }
+
 }
+
+@media only screen and (max-width: 992px) and (min-width: 601px){
+  .nav-raid{
+    margin-top: 20px;
+  }
+
+  .boss-list > img{
+    width: 500px;
+    height: 500px !important;
+  }
+
+  .boss-list{
+    margin-left: 30%;
+  }
+
+  .powers > div > span{
+    font-size: 1.5vw !important;
+  }
+
+  .powers > div {
+    padding-right:  2vw;
+    padding-left: 2vw;
+}
+
+  .boss-details{
+    margin-left: 5%;
+  }
+
+  .powers > div > p {
+      color: #fff;
+      font-size: 2.8vw !important;
+  }
+}
+
+@media only screen and (max-width: 1221px) and (min-width: 993px){
+ .boss-list{
+    margin-left: -7%;
+  }
+
+  .powers > div{
+      padding-right: 2vw;
+      padding-left: 2vw;
+  }
+}
+
 
 @media (max-width: 994px) {
 
   img.img-responsive {
     height: 350px;
   }
+
+
 }
 @media (max-width: 726px) {
   .weap-box, .char-box {
@@ -2004,8 +2202,21 @@ hr.divider {
   .powers > div > span{
     font-size: 1.1vw;
   }
+
+  powers > div > p {
+      color: #fff;
+      font-size: 1.8vw;
+  }
 }
 
+ .powers > div > span{
+    font-size: 1vw;
+  }
+
+  .powers > div > p {
+      color: #fff;
+      font-size: 1.8vw;
+  }
 
 @media (max-width: 1251px) {
   .boss-col {
