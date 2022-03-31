@@ -185,7 +185,7 @@ export default {
       'fetchStakeDetails',
       'fetchWaxBridgeDetails',
       'fetchRewardsClaimTax',
-      'configureMetaMask'
+      'configureMetaMask',
     ]),
     ...mapGetters([
       'getExchangeTransakUrl'
