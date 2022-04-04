@@ -185,6 +185,9 @@
                       </div>
                   </div>
                   <div class="col-lg-12 join-raid">
+                    <button class="claim-btn" @click="promptRewardClaim()" v-tooltip="'Rewards from Previous Raid'">
+                      {{$t('raid.claimRewards').toUpperCase()}}
+                    </button>
                     <button v-if="!isMobile()" class="btn-raid"  v-tooltip="$t('raid.joiningCostStamina', {formatStaminaHours})" @click="joinRaidMethod()">
                       {{$t('raid.joinRaid')}}
                     </button>
@@ -202,9 +205,6 @@
                         :maxDecimals="5"/>
                       </span>
                     </div>
-                    <button class="btn-raid" @click="promptRewardClaim()" v-tooltip="'Rewards from Previous Raid'">
-                      {{$t('raid.claimRewards').toUpperCase()}}
-                    </button>
                   </div>
                 </div>
               </div>
@@ -1320,6 +1320,26 @@ hr.divider {
   font-size: 20px;
 }
 
+.claim-btn {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  margin-right: 15px;
+  align-items: center;
+  vertical-align: middle;
+  justify-content: center;
+  background-image: url('../assets/btn-long.svg');
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  object-fit: fill;
+  padding: 10px 40px 10px 40px;
+  border: none;
+  font-family: Oswald;
+  color: #fff;
+  font-size: 20px;
+}
+
 .btn-rewards {
   display: flex;
   flex-direction: column;
@@ -1708,6 +1728,11 @@ hr.divider {
   display: flex;
 }
 
+.boss-name > div:nth-child(2){
+  margin-left: 30px;
+}
+
+
 .raid-countDown{
   display: flex;
   flex-direction: column;
@@ -1761,7 +1786,7 @@ hr.divider {
 .nav-raid {
   margin-top: -60px;
   display: flex;
-  background-color: rgba(0, 0, 0, 0.289);
+  background-color: rgb(20, 20, 20, 0.8);
 }
 
 .powers{
@@ -1939,6 +1964,11 @@ hr.divider {
 
   .none-desktop, .boxShadow {
     display: inline;
+  }
+
+
+  .btn-raid, .claim-btn {
+    font-size: 4.5vw !important;
   }
 
   .modal-dialog{
@@ -2189,6 +2219,13 @@ hr.divider {
     height: 350px;
   }
 
+  .btn-raid, .claim-btn {
+    font-size: 1.5vw;
+    word-spacing: normal;
+    white-space: nowrap;
+  }
+
+
 
 }
 @media (max-width: 726px) {
@@ -2211,6 +2248,12 @@ hr.divider {
 
   .powers > div > span{
     font-size: 1.1vw;
+  }
+
+  .btn-raid, .claim-btn {
+    font-size: 1.2vw;
+    word-spacing: normal;
+    white-space: nowrap;
   }
 
   powers > div > p {
