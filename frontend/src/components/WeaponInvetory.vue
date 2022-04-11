@@ -81,9 +81,9 @@
 
             <!-- WEAPON STATS -->
             <div class="bonus-power">
-              <div v-if="weapon.lowStarBurnPoints > 0"><span>{{ weapon.lowStarBurnPoints }} LB</span></div>
-              <div v-if="weapon.fourStarBurnPoints > 0"><span>{{ weapon.fourStarBurnPoints }} 4B</span></div>
-              <div v-if="weapon.fiveStarBurnPoints > 0"><span>{{ weapon.fiveStarBurnPoints }} 5B</span></div>
+              <div v-if="weapon.lowStarBurnPoints > 0"><span>LB : {{ weapon.lowStarBurnPoints }} </span></div>
+              <div v-if="weapon.fourStarBurnPoints > 0"><span>4B: {{ weapon.fourStarBurnPoints }}</span></div>
+              <div v-if="weapon.fiveStarBurnPoints > 0"><span>5B: {{ weapon.fiveStarBurnPoints }}</span></div>
             </div>
         </div>
       </div>
@@ -141,9 +141,9 @@
 
             <!-- WEAPON STATS -->
             <div class="bonus-power">
-              <div v-if="weapon.lowStarBurnPoints > 0"><span>{{ weapon.lowStarBurnPoints }} LB</span></div>
-              <div v-if="weapon.fourStarBurnPoints > 0"><span>{{ weapon.fourStarBurnPoints }} 4B</span></div>
-              <div v-if="weapon.fiveStarBurnPoints > 0"><span>{{ weapon.fiveStarBurnPoints }} 5B</span></div>
+              <div v-if="weapon.lowStarBurnPoints > 0"><span>LB: {{ weapon.lowStarBurnPoints }}</span></div>
+              <div v-if="weapon.fourStarBurnPoints > 0"><span>4B: {{ weapon.fourStarBurnPoints }}</span></div>
+              <div v-if="weapon.fiveStarBurnPoints > 0"><span>5B: {{ weapon.fiveStarBurnPoints }}</span></div>
             </div>
         </div>
       </div>
@@ -202,9 +202,9 @@
 
             <!-- WEAPON STATS -->
             <div class="bonus-power">
-              <div v-if="weapon.lowStarBurnPoints > 0"><span>{{ weapon.lowStarBurnPoints }} LB</span></div>
-              <div v-if="weapon.fourStarBurnPoints > 0"><span>{{ weapon.fourStarBurnPoints }} 4B</span></div>
-              <div v-if="weapon.fiveStarBurnPoints > 0"><span>{{ weapon.fiveStarBurnPoints }} 5B</span></div>
+              <div v-if="weapon.lowStarBurnPoints > 0"><span>LB: {{ weapon.lowStarBurnPoints }}</span></div>
+              <div v-if="weapon.fourStarBurnPoints > 0"><span>4B: {{ weapon.fourStarBurnPoints }}</span></div>
+              <div v-if="weapon.fiveStarBurnPoints > 0"><span>5B: {{ weapon.fiveStarBurnPoints }}</span></div>
             </div>
         </div>
       </div>
@@ -388,10 +388,6 @@ export default {
   min-width: 18px;
 }
 
-.raid-weapon{
-  font-size: 0.7em !important;
-}
-
 .placeholder {
   max-width: 180px;
   max-height: 180px;
@@ -536,6 +532,18 @@ export default {
 .bonus-power {
   font-size: 0.6em;
   text-align: right;
+  display: flex;
+  margin-top: 5px;
+}
+
+.bonus-power > div{
+  display: flex;
+  border: 1px solid rgba(255, 255, 255, 0.397);
+  padding: 0px 10px;
+  border-radius: 3px;
+  font-size: 1.2em;
+  color: #fff;
+  margin-right: 7px;
 }
 
 .small-durability-bar {

@@ -1,7 +1,6 @@
 <template>
   <div class="main-font">
     <div class="row">
-       <!-- <div class="col-md-4 col-lg-3 col-sm-2 col-2">dsd</div> -->
        <div class="col-md-12 col-lg-12 col-sm-12 col-12">
         <div class="row">
           <div class="col-lg-12" id="raid-header">
@@ -168,7 +167,6 @@
                       </div>
                       <div>
                         <span> {{$t('raid.victoryChance')}}</span>
-                        <!-- <p>7{{ formattedWinChance }}</p> -->
                         <p>{{formattedWinChance}}</p>
                       </div>
                   </div>
@@ -273,7 +271,7 @@
                 <div class="row">
                   <div class="col-lg-12 powers">
                       <div>
-                        <!-- <span>{{$t('PartneredProject.Multiplier')}}</span> -->
+                        <span>{{$t('PartneredProject.multiplier')}}</span>
                         <p>x{{ currentMultiplier }}</p>
                       </div>
                       <div style="border-right:none">
@@ -288,7 +286,6 @@
                             .
                         </div>
                         <div>
-                          <!-- <img :src="getCharacterArt(currentCharacter)" alt="KNIGHTS"> -->
                           <p class="name bold character-name"> {{getCleanCharacterName(currentCharacterId)}} </p>
                           <span class="subtext subtext-stats">
                             <p style="text-transform:capitalize"><span :class="traitNumberToName(currentCharacter.trait).toLowerCase()
@@ -362,13 +359,11 @@
           </b-container>
         </div>
       </div>
-        <div class="bot-bg-img promotion-decoration">
-          <img src="../assets/separator.png">
-        </div>
       </div>
       <div class="footer-close">
+          <img src="../assets/separator.png">
           <p class="tap">{{$t('raid.clickAnywhere')}}</p>
-          <span @click="$bvModal.hide('rewardsModal')"><img style="margin: auto;width: 40px !important;" src="../assets/close-btn.png" alt=""></span>
+          <span @click="$bvModal.hide('rewardsModal')"><img src="../assets/close-btn.png" alt=""></span>
       </div>
     </b-modal>
 
@@ -377,7 +372,6 @@
           <b-spinner v-if="spin" type="grow" :label="$t('raid.loading')"></b-spinner>
           <span>{{$t('raid.claimingRewards')}}</span>
       </div>
-      <!-- @ok="claimRewardIndex(rewardsRaidId)" -->
      <div class="rewards-header" v-if="!isLoading">
         <p>{{$t('raid.raidRewardsSelector')}}</p>
         <p>{{$t('raid.selectRaid')}}</p>
@@ -474,7 +468,6 @@ const dragonNames = [
   // 'Richard Melics',
 ];
 
-// const moment = require('moment');
 const bossImages = [
   '../assets/raid-bosses/CB_Hellborn Brute.gif',
   '../assets/raid-bosses/CB_Hellborn Executioner.gif',
@@ -888,7 +881,6 @@ export default Vue.extend({
       await refreshRaidData();
     }, 3000);
 
-    // (this as any).$bvModal.show('rewardsModal');
     Events.$on('setActiveWeapon', (weapon: any) =>{
       this.selectedWeapon = weapon;
       this.selectedWeaponId = weapon.id;
@@ -2033,6 +2025,23 @@ hr.divider {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+  }
+
+  .footer-close > p{
+    font-family: Roboto;
+    color: rgba(255, 255, 255, 0.336);
+    margin-bottom: 1em;
+  }
+
+   .footer-close > span > img{
+     margin: auto;
+     width: 40px !important;
+  }
+
+  .footer-close > img{
+     margin: auto;
+     width: 20em !important;
+     margin-bottom: 1em;
   }
 
 

@@ -2,7 +2,7 @@
   "name": "English",
   "viewLink": {
     "plaza": "Plaza",
-    "viewLink" : "Character",
+    "character" : "Character",
     "blacksmith": "Blacksmith",
     "combat": "Combat",
     "raid": "Raid",

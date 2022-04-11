@@ -11,14 +11,16 @@
                   :style="`--staminaReady: ${(getCharacterStamina(c.id)/maxStamina)*100}%;`"
                   v-for="c in filteredCharactersForList"
                   :key="c.id"
-                  @click="!getIsInCombat && setCurrentCharacter(c.id) && alert(c.id)"
-                >
+                  @click="(!getIfCharacterIsInRaid(c.id) || !c.pvpStatus === 'IN_ARENA' || !getIsInCombat) && setCurrentCharacter(c.id) && alert(c.id) ">
+                          <!--------  IN RAID ----------------IN ARENA ---------------------IN COMBAT ------------>
                 <div class="character-element">
                   <div class="element-frame">
                       <div>
                         <span
                           :id="`${setIdForElement(c.trait, c.isSelected)}`"
                         />
+                        <span v-if="toggled && getIfCharacterIsInRaid(c.id)" class="raid-indicator"></span>
+                        <span v-if="toggled && c.pvpStatus === 'IN_ARENA'" class="pvp-indicator"></span>
                       </div>
                   </div>
                   <div class="element-frame-active">
@@ -154,9 +156,7 @@ export default Vue.extend({
       else return 'character';
     },
 
-    //getNftStatus(chars: any): string {
     getNftStatus(chars: any){
-      // const charStatus = await this.composeCharacterData(chars.id);
       this.composeCharacterData(chars.id).then(data => {
         if (data.status !== undefined && data.status in NftStatus) {
           for(const a of this.filteredCharactersForList){
@@ -361,6 +361,24 @@ div.character-list{
   overflow-y: visible;
 }
 
+.raid-indicator{
+  content: url('../../assets/navbar-icons/arena-icon.png');
+  height: 15px;
+  width: 15px;
+  position: absolute;
+  margin-bottom: -80px;
+  right: 0;
+}
+
+.pvp-indicator{
+  content: url('../../assets/navbar-icons/arena-icon.png');
+  height: 15px;
+  width: 15px;
+  position: absolute;
+  margin-bottom: -80px;
+  right: 0;
+}
+
 
 
 div.character-list .character .character-element .element-frame-active{
@@ -475,6 +493,7 @@ li.character-highlight{
 .disabled-li {
   pointer-events: none;
   opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .trait-icon {

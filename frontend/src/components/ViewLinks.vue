@@ -7,7 +7,7 @@
     <li class="character top-nav-links">
       <router-link v-if="!stakeOnly" :to="{ name: 'plaza' }" exact class="nav-link">
         <div class="icon"><img src="../assets/navbar-icons/plaza-icon.png" class="ui-link-icon" alt="Plaza"></div>
-        <div class="link-text">{{ $t("viewLink.viewLink") }}</div>
+        <div class="link-text">{{ $t("viewLink.character") }}</div>
       </router-link>
     </li>
 
