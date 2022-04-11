@@ -4,9 +4,7 @@
     <div class="content dark-bg-text">
       <b-row>
         <character-bar :isToggled="toggleSideBar" v-if="!featureFlagStakeOnly && currentCharacterId !== null"/>
-        <b-col :class="renderPageDisplay()"
-        :id="!featureFlagStakeOnly && currentCharacterId !== null ? 'bg-combat' : ''">
-        <!-- :class="!featureFlagStakeOnly && currentCharacterId !== null ? 'bg-image' : ''"> -->
+        <b-col :class="renderPageDisplay()">
           <router-view v-if="canShowApp" />
         </b-col>
         <WeaponRowGrid v-if="showWeapon" v-model.lazy="currentWeaponId" :checkForDurability="true"/>
@@ -229,7 +227,7 @@ export default {
       else this.showAds = localStorage.getItem('show-ads') === 'true';
     },
     async initializeRecruitCost() {
-      const recruitCost = await this.contracts.CryptoBlades.methods.mintCharacterFee().call({ from: this.defaultAccount });
+      const recruitCost = await this.contracts.CryptoBlades.methods.getMintCharacterFee().call({ from: this.defaultAccount });
       const skillRecruitCost = await this.contracts.CryptoBlades.methods.usdToSkill(recruitCost).call();
       this.recruitCost = BN(skillRecruitCost)
         .div(BN(10).pow(18))
@@ -489,11 +487,6 @@ button.btn.button.main-font.dark-bg-text.encounter-button.btn-styled.btn-primary
   transition: 1s all;
 }
 
-#bg-combat{
-  background-image: url('./assets/combat-bg.png');
-  background-size: cover;
-  background-repeat: no-repeat;
-}
 
 hr.hr-divider {
   border-top: 1px solid #9e8a57;
